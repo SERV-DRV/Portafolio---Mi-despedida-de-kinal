@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: "hidden",
         marginBottom: SPACING.md, 
-        flex: 1,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.05,
