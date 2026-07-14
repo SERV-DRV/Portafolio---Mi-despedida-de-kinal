@@ -38,14 +38,7 @@ export default function HomeScreen() {
         }
     };
 
-    const getCardWrapperStyle = () => {
-        if (width > 768) {
-            return { width: 400 }; 
-        }
-        return { width: width * 0.85 }; 
-    };
 
-    const isMobile = width < 768;
 
     return (
         <View style={styles.container}>
@@ -98,7 +91,7 @@ export default function HomeScreen() {
                     <View style={styles.sectionInner}>
                         <Text style={styles.sectionTitleWhite}>Habilidades y Educación</Text>
                         
-                        <View style={[styles.skillsRow, isMobile && styles.skillsRowMobile]}>
+                        <View style={[styles.skillsRow, width < 768 && styles.skillsRowMobile]}>
                             <View style={styles.educationColumn}>
                                 <Text style={styles.subTitleWhite}>Formación Académica</Text>
                                 <View style={styles.eduItem}>
@@ -140,13 +133,14 @@ export default function HomeScreen() {
                         <ScrollView 
                             horizontal 
                             showsHorizontalScrollIndicator={false} 
+                            style={{ minHeight: 380 }}
                             contentContainerStyle={styles.projectsScrollContainer}
                             snapToInterval={width > 768 ? 400 + SPACING.md : (width * 0.85) + SPACING.md}
                             decelerationRate="fast"
                         >
                             {projects.map((project) => {
                                 return (
-                                    <View key={project.id} style={[styles.projectCardWrapper, getCardWrapperStyle()]}>
+                                    <View key={project.id} style={[styles.projectCardWrapper, { width: 400, maxWidth: '85vw' }]}>
                                         <ProjectCard 
                                             project={project} 
                                             onPress={() => handleProjectPress(project)} 
