@@ -1,35 +1,17 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { COLORS, SPACING, FONT_SIZE } from "../../../shared/constants/theme";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
 
 const ProjectCard = ({ project, onPress }) => {
-    const scale = useSharedValue(1);
-
-    const handlePressIn = () => {
-        scale.value = withSpring(0.97, { damping: 15 });
-    };
-
-    const handlePressOut = () => {
-        scale.value = withSpring(1, { damping: 15 });
-    };
-
-    const animatedImageStyle = useAnimatedStyle(() => ({
-        transform: [{ scale: scale.value }],
-    }));
-
     return (
-        <Pressable 
+        <TouchableOpacity 
             style={styles.card}
+            activeOpacity={0.8}
             onPress={onPress}
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
         >
             <View style={[styles.imageContainer, { alignItems: 'center', justifyContent: 'center' }]}>
-                <Animated.View style={animatedImageStyle}>
-                    <FontAwesome5 name={project.icon || "code"} size={64} color={COLORS.info} />
-                </Animated.View>
+                <FontAwesome5 name={project.icon || "code"} size={64} color={COLORS.info} />
             </View>
             <View style={styles.content}>
                 <Text style={styles.name} numberOfLines={1}>{project.name}</Text>
@@ -39,7 +21,7 @@ const ProjectCard = ({ project, onPress }) => {
                     <MaterialIcons name="language" size={24} color={COLORS.info} />
                 </View>
             </View>
-        </Pressable>
+        </TouchableOpacity>
     );
 };
 
