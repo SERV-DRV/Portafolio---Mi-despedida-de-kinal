@@ -117,9 +117,13 @@ export default function HomeScreen() {
                             </FadeInUp>
                         </View>
 
-                        <FadeInUp delay={600} style={[styles.heroImageContainer, { marginTop: isDesktop ? 0 : SPACING.xxl }]}>
-                            <View style={styles.imageWrapper}>
-                                <Image source={require('../assets/me/me.png')} style={styles.heroImage} resizeMode="contain" />
+                        <FadeInUp delay={600} style={isDesktop ? styles.heroImageContainerDesktop : styles.heroImageContainerMobile}>
+                            <View style={isDesktop ? styles.imageWrapperDesktop : styles.imageWrapperMobile}>
+                                <Image 
+                                    source={require('../assets/me/me.png')} 
+                                    style={[styles.heroImage, !isDesktop && { opacity: 0.08 }]} 
+                                    resizeMode="contain" 
+                                />
                             </View>
                         </FadeInUp>
                         
@@ -278,17 +282,32 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZE.sm,
         fontFamily: 'monospace',
     },
-    heroImageContainer: {
+    heroImageContainerDesktop: {
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: SPACING.xl,
     },
-    imageWrapper: {
+    heroImageContainerMobile: {
+        position: 'absolute',
+        top: '20%',
+        right: -80, // Hangs slightly off-screen to look cool
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 0,
+        pointerEvents: 'none', // Allows clicking through the faded image
+    },
+    imageWrapperDesktop: {
         position: 'relative',
         width: 350,
         height: 350,
         zIndex: 1,
+    },
+    imageWrapperMobile: {
+        position: 'relative',
+        width: 500, // Very large for a background watermark effect
+        height: 500,
+        zIndex: 0,
     },
     heroImage: {
         width: '100%',
