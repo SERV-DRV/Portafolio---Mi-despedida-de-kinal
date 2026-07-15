@@ -1,19 +1,22 @@
-import React, { useRef } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, Animated } from "react-native";
+import React, { useRef, useState } from "react";
+import { View, Text, StyleSheet, Pressable, ScrollView, Animated } from "react-native";
 import { COLORS, SPACING, FONT_SIZE } from "../../../shared/constants/theme";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 const ProjectCard = ({ project, onPress }) => {
     const translateYAnim = useRef(new Animated.Value(0)).current;
+    const [isHovered, setIsHovered] = useState(false);
 
-    const handlePressIn = () => {
+    const handleHoverIn = () => {
+        setIsHovered(true);
         Animated.spring(translateYAnim, {
             toValue: -5,
             useNativeDriver: true,
         }).start();
     };
 
-    const handlePressOut = () => {
+    const handleHoverOut = () => {
+        setIsHovered(false);
         Animated.spring(translateYAnim, {
             toValue: 0,
             friction: 3,
@@ -23,12 +26,16 @@ const ProjectCard = ({ project, onPress }) => {
     };
 
     return (
-        <TouchableWithoutFeedback 
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
+        <Pressable 
+            onHoverIn={handleHoverIn}
+            onHoverOut={handleHoverOut}
             onPress={onPress}
         >
-            <Animated.View style={[styles.card, { transform: [{ translateY: translateYAnim }] }]}>
+            <Animated.View style={[
+                styles.card, 
+                { transform: [{ translateY: translateYAnim }] },
+                isHovered && styles.cardHovered
+            ]}>
                 <View style={styles.header}>
                     <FontAwesome5 name="folder" size={40} color={COLORS.primary} />
                     <View style={styles.yearBadge}>
@@ -55,7 +62,7 @@ const ProjectCard = ({ project, onPress }) => {
                     <Text style={styles.footerText}>Ver proyecto</Text>
                 </View>
             </Animated.View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 
@@ -69,6 +76,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.5,
         shadowRadius: 20,
+        elevation: 10,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
+    cardHovered: {
+        borderColor: COLORS.primary,
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 15,
         elevation: 10,
     },
     header: {

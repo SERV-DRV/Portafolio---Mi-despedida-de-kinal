@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Image, Animated } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Image, Animated, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, SPACING, FONT_SIZE } from "../src/shared/constants/theme";
@@ -67,6 +67,41 @@ const CustomProgressBar = ({ skill, index }) => {
                 </View>
             </View>
         </View>
+    );
+};
+
+const SoftSkillCard = ({ skill, isDesktop }) => {
+    const translateYAnim = useRef(new Animated.Value(0)).current;
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleHoverIn = () => {
+        setIsHovered(true);
+        Animated.spring(translateYAnim, { toValue: -5, useNativeDriver: true }).start();
+    };
+
+    const handleHoverOut = () => {
+        setIsHovered(false);
+        Animated.spring(translateYAnim, { toValue: 0, useNativeDriver: true }).start();
+    };
+
+    return (
+        <Pressable 
+            onHoverIn={handleHoverIn}
+            onHoverOut={handleHoverOut}
+            style={[
+                styles.softSkillCard, 
+                { width: isDesktop ? '31%' : '100%' },
+                isHovered && styles.softSkillCardHovered
+            ]}
+        >
+            <Animated.View style={{ transform: [{ translateY: translateYAnim }], alignItems: 'center' }}>
+                <View style={styles.softSkillIconContainer}>
+                    <FontAwesome5 name={skill.icon} size={24} color={COLORS.primary} />
+                </View>
+                <Text style={styles.softSkillName}>{skill.name}</Text>
+                <Text style={styles.softSkillDesc}>{skill.description}</Text>
+            </Animated.View>
+        </Pressable>
     );
 };
 
@@ -170,14 +205,8 @@ export default function HomeScreen() {
                             </View>
 
                             <View style={styles.softSkillsGrid}>
-                                {softSkills.map((skill, index) => (
-                                    <View key={skill.name} style={[styles.softSkillCard, { width: isDesktop ? '31%' : '100%' }]}>
-                                        <View style={styles.softSkillIconContainer}>
-                                            <FontAwesome5 name={skill.icon} size={24} color={COLORS.primary} />
-                                        </View>
-                                        <Text style={styles.softSkillName}>{skill.name}</Text>
-                                        <Text style={styles.softSkillDesc}>{skill.description}</Text>
-                                    </View>
+                                {softSkills.map((skill) => (
+                                    <SoftSkillCard key={skill.name} skill={skill} isDesktop={isDesktop} />
                                 ))}
                             </View>
                         </FadeInUp>
@@ -508,6 +537,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: COLORS.surfaceVariant,
+    },
+    softSkillCardHovered: {
+        borderColor: COLORS.primary,
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 15,
+        elevation: 10,
     },
     softSkillIconContainer: {
         width: 60,
