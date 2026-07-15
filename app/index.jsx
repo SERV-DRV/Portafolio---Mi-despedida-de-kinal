@@ -119,8 +119,7 @@ export default function HomeScreen() {
 
                         <FadeInUp delay={600} style={[styles.heroImageContainer, { marginTop: isDesktop ? 0 : SPACING.xxl }]}>
                             <View style={styles.imageWrapper}>
-                                <Image source={require('../assets/me/me.png')} style={styles.heroImage} resizeMode="cover" />
-                                <View style={styles.imageBorder} />
+                                <Image source={require('../assets/me/me.png')} style={styles.heroImage} resizeMode="contain" />
                             </View>
                         </FadeInUp>
                         
@@ -287,27 +286,14 @@ const styles = StyleSheet.create({
     },
     imageWrapper: {
         position: 'relative',
-        width: 250,
-        height: 250,
+        width: 350,
+        height: 350,
         zIndex: 1,
     },
     heroImage: {
         width: '100%',
         height: '100%',
-        borderRadius: 8,
         zIndex: 2,
-    },
-    imageBorder: {
-        position: 'absolute',
-        top: 20,
-        left: 20,
-        width: '100%',
-        height: '100%',
-        borderWidth: 2,
-        borderColor: COLORS.primary,
-        borderRadius: 8,
-        zIndex: 0,
-        transition: 'all 0.3s ease',
     },
 
     section: {
