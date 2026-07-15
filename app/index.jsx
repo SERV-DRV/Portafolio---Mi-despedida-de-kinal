@@ -92,27 +92,38 @@ export default function HomeScreen() {
                 
                 {/* HERO SECTION */}
                 <View style={styles.heroSection}>
-                    <View style={styles.heroInner}>
-                        <FadeInUp delay={100}>
-                            <Text style={styles.heroGreeting}>Hola, mi nombre es</Text>
+                    <View style={[styles.heroInner, { flexDirection: isDesktop ? 'row' : 'column', alignItems: isDesktop ? 'center' : 'flex-start' }]}>
+                        
+                        <View style={styles.heroTextContainer}>
+                            <FadeInUp delay={100}>
+                                <Text style={styles.heroGreeting}>Hola, mi nombre es</Text>
+                            </FadeInUp>
+                            <FadeInUp delay={200}>
+                                <Text style={styles.heroName}>{personalInfo.name.split(' ')[0]} {personalInfo.name.split(' ')[1]}.</Text>
+                            </FadeInUp>
+                            <FadeInUp delay={300}>
+                                <Text style={styles.heroTitle}>{personalInfo.title}.</Text>
+                            </FadeInUp>
+                            <FadeInUp delay={400}>
+                                <Text style={styles.heroBio}>{personalInfo.bio}</Text>
+                            </FadeInUp>
+                            <FadeInUp delay={500}>
+                                <TouchableOpacity 
+                                    style={styles.heroButton}
+                                    onPress={() => handleSocialPress(personalInfo.links.github)}
+                                >
+                                    <Text style={styles.heroButtonText}>Ver mi Github</Text>
+                                </TouchableOpacity>
+                            </FadeInUp>
+                        </View>
+
+                        <FadeInUp delay={600} style={[styles.heroImageContainer, { marginTop: isDesktop ? 0 : SPACING.xxl }]}>
+                            <View style={styles.imageWrapper}>
+                                <Image source={require('../assets/me/me.png')} style={styles.heroImage} resizeMode="cover" />
+                                <View style={styles.imageBorder} />
+                            </View>
                         </FadeInUp>
-                        <FadeInUp delay={200}>
-                            <Text style={styles.heroName}>{personalInfo.name.split(' ')[0]} {personalInfo.name.split(' ')[1]}.</Text>
-                        </FadeInUp>
-                        <FadeInUp delay={300}>
-                            <Text style={styles.heroTitle}>{personalInfo.title}.</Text>
-                        </FadeInUp>
-                        <FadeInUp delay={400}>
-                            <Text style={styles.heroBio}>{personalInfo.bio}</Text>
-                        </FadeInUp>
-                        <FadeInUp delay={500}>
-                            <TouchableOpacity 
-                                style={styles.heroButton}
-                                onPress={() => handleSocialPress(personalInfo.links.github)}
-                            >
-                                <Text style={styles.heroButtonText}>Ver mi Github</Text>
-                            </TouchableOpacity>
-                        </FadeInUp>
+                        
                     </View>
                 </View>
 
@@ -219,6 +230,11 @@ const styles = StyleSheet.create({
         maxWidth: 1000,
         width: '100%',
         alignSelf: 'center',
+        justifyContent: 'space-between',
+    },
+    heroTextContainer: {
+        flex: 1,
+        maxWidth: 600,
     },
     heroGreeting: {
         color: COLORS.primary,
@@ -262,6 +278,36 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontSize: FONT_SIZE.sm,
         fontFamily: 'monospace',
+    },
+    heroImageContainer: {
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: SPACING.xl,
+    },
+    imageWrapper: {
+        position: 'relative',
+        width: 250,
+        height: 250,
+        zIndex: 1,
+    },
+    heroImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 8,
+        zIndex: 2,
+    },
+    imageBorder: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        width: '100%',
+        height: '100%',
+        borderWidth: 2,
+        borderColor: COLORS.primary,
+        borderRadius: 8,
+        zIndex: 0,
+        transition: 'all 0.3s ease',
     },
 
     section: {
