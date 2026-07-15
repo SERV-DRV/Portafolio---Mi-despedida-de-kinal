@@ -24,7 +24,7 @@ const FadeInUp = ({ delay, children, style }) => {
     return <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>;
 };
 
-// Exact replica of the custom progress bar from the image
+// Minimalist & Elegant Progress Bar
 const CustomProgressBar = ({ skill, index }) => {
     const widthAnim = useRef(new Animated.Value(0)).current;
 
@@ -41,20 +41,20 @@ const CustomProgressBar = ({ skill, index }) => {
 
     return (
         <View style={styles.skillRow}>
-            {/* The white circle with the image inside */}
-            <View style={styles.skillIconCircle}>
-                <Image source={skill.image} style={styles.skillIconImage} resizeMode="contain" />
-            </View>
+            {/* Minimalist icon without white background */}
+            <Image source={skill.image} style={styles.skillIconImageMinimal} resizeMode="contain" />
             
-            {/* The colored pill container */}
-            <View style={[styles.skillPillBg, { backgroundColor: skill.color }]}>
-                {/* The percentage text on the left */}
-                <Text style={styles.skillPercentageText}>{skill.percentage}%</Text>
+            <View style={styles.skillContent}>
+                {/* Text row */}
+                <View style={styles.skillTextRow}>
+                    <Text style={styles.skillNameMinimal}>{skill.name}</Text>
+                    <Text style={styles.skillPercentageMinimal}>{skill.percentage}%</Text>
+                </View>
                 
-                {/* The white pill fill */}
-                <View style={styles.skillPillTrack}>
+                {/* Thin track */}
+                <View style={styles.skillPillTrackMinimal}>
                     <Animated.View style={[
-                        styles.skillPillFill, 
+                        styles.skillPillFillMinimal, 
                         { 
                             width: widthAnim.interpolate({
                                 inputRange: [0, 100],
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
         lineHeight: 28,
     },
 
-    // Custom Progress Bar Styles
+    // Minimalist Custom Progress Bar Styles
     skillsContainer: {
         maxWidth: 800,
         gap: SPACING.md,
@@ -313,53 +313,47 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: SPACING.md,
     },
-    skillIconCircle: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: SPACING.md,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 10,
-        elevation: 5,
-        padding: 10,
-        zIndex: 10,
+    skillIconImageMinimal: {
+        width: 32,
+        height: 32,
+        borderRadius: 4,
+        marginRight: SPACING.lg,
     },
-    skillIconImage: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-    },
-    skillPillBg: {
+    skillContent: {
         flex: 1,
+    },
+    skillTextRow: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        borderRadius: 30,
-        height: 50,
-        paddingHorizontal: SPACING.lg,
+        marginBottom: SPACING.xs,
     },
-    skillPercentageText: {
-        color: '#fff',
+    skillNameMinimal: {
+        color: COLORS.text,
         fontSize: FONT_SIZE.md,
-        fontWeight: '700',
-        width: 50, // Fixed width so bars align perfectly
-        marginRight: SPACING.sm,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
     },
-    skillPillTrack: {
-        flex: 1,
-        height: 24,
-        justifyContent: 'center',
+    skillPercentageMinimal: {
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.sm,
+        fontFamily: 'monospace',
     },
-    skillPillFill: {
+    skillPillTrackMinimal: {
+        width: '100%',
+        height: 4,
+        backgroundColor: COLORS.surfaceVariant,
+        borderRadius: 2,
+    },
+    skillPillFillMinimal: {
         height: '100%',
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderTopLeftRadius: 12,
-        borderBottomLeftRadius: 12,
+        backgroundColor: COLORS.primary,
+        borderRadius: 2,
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 3,
     },
 
     projectsGrid: {
