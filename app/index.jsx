@@ -41,8 +41,10 @@ const CustomProgressBar = ({ skill, index }) => {
 
     return (
         <View style={styles.skillRow}>
-            {/* Minimalist icon without white background */}
-            <Image source={skill.image} style={styles.skillIconImageMinimal} resizeMode="contain" />
+            {/* Minimalist icon instead of image */}
+            <View style={styles.skillIconImageMinimal}>
+                <FontAwesome5 name={skill.icon} size={24} color={COLORS.primary} />
+            </View>
             
             <View style={styles.skillContent}>
                 {/* Text row */}
@@ -316,8 +318,9 @@ const styles = StyleSheet.create({
     skillIconImageMinimal: {
         width: 32,
         height: 32,
-        borderRadius: 4,
         marginRight: SPACING.lg,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     skillContent: {
         flex: 1,
