@@ -1,85 +1,137 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
-import CustomModal from "../../src/shared/components/Modal";
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { projects } from "../../src/data/portfolioData";
+
+// Animated component
+const FadeInUp = ({ delay, children, style }) => {
+    const opacity = useRef(new Animated.Value(0)).current;
+    const translateY = useRef(new Animated.Value(30)).current;
+
+    useEffect(() => {
+        Animated.sequence([
+            Animated.delay(delay),
+            Animated.parallel([
+                Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+                Animated.timing(translateY, { toValue: 0, duration: 800, useNativeDriver: true })
+            ])
+        ]).start();
+    }, []);
+
+    return <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>;
+};
 
 export default function ProjectDetailScreen() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
-    const [modalVisible, setModalVisible] = useState(false);
+    const { width } = useWindowDimensions();
 
-    // Encuentra el proyecto o crea uno vacío si no se encuentra
     const details = projects.find(p => p.id === parseInt(id)) || { 
-        name: "Proyecto", 
-        description: "Descripción", 
-        fullDescription: "", 
+        name: "Proyecto no encontrado", 
+        description: "", 
+        fullDescription: "No se pudo cargar la información del proyecto.", 
         technologies: [], 
         year: "", 
-        link: "#" 
+        link: "#",
+        icon: "file-code"
+    };
+
+    const isDesktop = width > 900;
+
+    const openLink = (url) => {
+        if (url && url !== "#") {
+            Linking.openURL(url).catch(() => {});
+        }
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <Text style={styles.backButtonText}>← Back</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.content}>
-                <Text style={styles.title}>{details.name}</Text>
-                <Text style={styles.subtitle}>{details.description}</Text>
+        <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 
-                <View style={styles.infoSection}>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Año:</Text>
-                        <Text style={styles.infoValue}>{details.year}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Tecnologías:</Text>
-                        <View style={styles.techContainer}>
-                            {details.technologies?.map((tech, index) => (
-                                <View key={index} style={styles.techBadge}>
-                                    <Text style={styles.techText}>{tech}</Text>
-                                </View>
-                            ))}
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.descriptionSection}>
-                    <Text style={styles.sectionTitle}>Descripción</Text>
-                    <Text style={styles.description}>{details.fullDescription}</Text>
-                </View>
-
-                <TouchableOpacity 
-                    style={styles.linkButton}
-                    onPress={() => setModalVisible(true)}
-                >
-                    <Text style={styles.linkButtonText}>Ver Proyecto</Text>
-                </TouchableOpacity>
-            </View>
-
-            <CustomModal
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-                title="Enlace del Proyecto"
-            >
-                <View style={styles.modalContent}>
-                    <Text style={styles.modalText}>
-                        Este proyecto está disponible en la web. Haz clic en el enlace para ver el código fuente o el proyecto.
-                    </Text>
-                    <TouchableOpacity 
-                        style={styles.modalButton}
-                        onPress={() => Linking.openURL(details.link).catch(() => {})}
-                    >
-                        <Text style={styles.modalButtonText}>Abrir Enlace</Text>
+                {/* Back Button Area */}
+                <View style={styles.headerRow}>
+                    <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                        <MaterialIcons name="arrow-back" size={24} color={COLORS.primary} />
+                        <Text style={styles.backButtonText}>Volver al Portafolio</Text>
                     </TouchableOpacity>
                 </View>
-            </CustomModal>
-        </ScrollView>
+
+                <View style={styles.contentInner}>
+                    <FadeInUp delay={100} style={styles.titleSection}>
+                        <View style={styles.iconCircle}>
+                            <FontAwesome5 name={details.icon || "code"} size={32} color={COLORS.background} />
+                        </View>
+                        <Text style={styles.title}>{details.name}</Text>
+                        <Text style={styles.subtitle}>{details.description}</Text>
+                    </FadeInUp>
+
+                    <View style={[styles.mainGrid, { flexDirection: isDesktop ? 'row' : 'column' }]}>
+                        
+                        {/* Left Column: Description & Buttons */}
+                        <View style={styles.leftCol}>
+                            <FadeInUp delay={200}>
+                                <Text style={styles.sectionTitle}>Sobre este proyecto</Text>
+                                <Text style={styles.description}>{details.fullDescription}</Text>
+                            </FadeInUp>
+
+                            <FadeInUp delay={300} style={styles.buttonsRow}>
+                                {details.link && (
+                                    <TouchableOpacity 
+                                        style={styles.primaryButton}
+                                        onPress={() => openLink(details.link)}
+                                    >
+                                        <FontAwesome5 name="github" size={18} color={COLORS.background} />
+                                        <Text style={styles.primaryButtonText}>Ver en GitHub</Text>
+                                    </TouchableOpacity>
+                                )}
+                                
+                                {details.demoLink && (
+                                    <TouchableOpacity 
+                                        style={styles.secondaryButton}
+                                        onPress={() => openLink(details.demoLink)}
+                                    >
+                                        <MaterialIcons name="open-in-new" size={20} color={COLORS.primary} />
+                                        <Text style={styles.secondaryButtonText}>Ver Demo</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </FadeInUp>
+                        </View>
+
+                        {/* Right Column: Tech Specs */}
+                        <View style={styles.rightCol}>
+                            <FadeInUp delay={400} style={styles.specsCard}>
+                                <View style={styles.specRow}>
+                                    <FontAwesome5 name="calendar-alt" size={16} color={COLORS.primary} style={styles.specIcon} />
+                                    <View>
+                                        <Text style={styles.specLabel}>Año de desarrollo</Text>
+                                        <Text style={styles.specValue}>{details.year}</Text>
+                                    </View>
+                                </View>
+
+                                <View style={styles.divider} />
+
+                                <View style={styles.specRow}>
+                                    <FontAwesome5 name="layer-group" size={16} color={COLORS.primary} style={styles.specIcon} />
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={styles.specLabel}>Tecnologías utilizadas</Text>
+                                        <View style={styles.techContainer}>
+                                            {details.technologies?.map((tech, index) => (
+                                                <View key={index} style={styles.techBadge}>
+                                                    <Text style={styles.techText}>{tech}</Text>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </View>
+                                </View>
+                            </FadeInUp>
+                        </View>
+
+                    </View>
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
@@ -88,107 +140,163 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.background,
     },
-    header: {
-        padding: SPACING.lg,
+    scrollContent: {
+        paddingTop: SPACING.xl,
+        paddingBottom: SPACING.xxl * 2,
+        alignItems: 'center',
+    },
+    headerRow: {
+        width: '100%',
+        maxWidth: 1000,
+        paddingHorizontal: SPACING.xl,
+        marginBottom: SPACING.xl,
     },
     backButton: {
-        alignSelf: "flex-start",
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        paddingVertical: SPACING.sm,
     },
     backButtonText: {
-        color: COLORS.info,
-        fontSize: FONT_SIZE.lg,
-        fontWeight: "bold",
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.md,
+        fontFamily: 'monospace',
+        marginLeft: SPACING.sm,
     },
-    content: {
-        padding: SPACING.xl,
+    contentInner: {
+        width: '100%',
+        maxWidth: 1000,
+        paddingHorizontal: SPACING.xl,
+    },
+    titleSection: {
+        marginBottom: SPACING.xxl,
+    },
+    iconCircle: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: SPACING.lg,
     },
     title: {
-        fontSize: FONT_SIZE.huge,
-        fontWeight: "bold",
+        fontSize: 50,
+        fontWeight: "900",
         color: COLORS.text,
+        letterSpacing: -1,
         marginBottom: SPACING.sm,
     },
     subtitle: {
-        fontSize: FONT_SIZE.lg,
-        color: COLORS.textLight,
-        marginBottom: SPACING.xl,
+        fontSize: FONT_SIZE.xl,
+        color: COLORS.secondary,
+        fontWeight: "600",
     },
-    infoSection: {
-        marginBottom: SPACING.xl,
+    mainGrid: {
+        gap: SPACING.xxl,
     },
-    infoRow: {
-        marginBottom: SPACING.md,
+    leftCol: {
+        flex: 2,
     },
-    infoLabel: {
-        fontSize: FONT_SIZE.md,
-        color: COLORS.info,
-        fontWeight: "bold",
-        marginBottom: SPACING.xs,
-    },
-    infoValue: {
-        fontSize: FONT_SIZE.md,
-        color: COLORS.text,
-    },
-    techContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: SPACING.sm,
-    },
-    techBadge: {
-        backgroundColor: COLORS.surfaceVariant,
-        paddingHorizontal: SPACING.md,
-        paddingVertical: SPACING.xs,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: COLORS.info,
-    },
-    techText: {
-        color: COLORS.info,
-        fontSize: FONT_SIZE.sm,
-    },
-    descriptionSection: {
-        marginBottom: SPACING.xl,
+    rightCol: {
+        flex: 1,
     },
     sectionTitle: {
-        fontSize: FONT_SIZE.xl,
+        fontSize: 24,
         fontWeight: "bold",
         color: COLORS.text,
-        marginBottom: SPACING.md,
+        marginBottom: SPACING.lg,
     },
     description: {
-        fontSize: FONT_SIZE.md,
-        color: COLORS.textLight,
-        lineHeight: 24,
-    },
-    linkButton: {
-        backgroundColor: COLORS.info,
-        padding: SPACING.lg,
-        borderRadius: 8,
-        alignItems: "center",
-        marginTop: SPACING.lg,
-    },
-    linkButtonText: {
-        color: COLORS.background,
         fontSize: FONT_SIZE.lg,
-        fontWeight: "bold",
-    },
-    modalContent: {
-        gap: SPACING.lg,
-    },
-    modalText: {
         color: COLORS.textLight,
-        fontSize: FONT_SIZE.md,
-        lineHeight: 24,
+        lineHeight: 30,
+        marginBottom: SPACING.xxl,
     },
-    modalButton: {
-        backgroundColor: COLORS.info,
-        padding: SPACING.lg,
-        borderRadius: 8,
-        alignItems: "center",
+    buttonsRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: SPACING.md,
     },
-    modalButtonText: {
+    primaryButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.primary,
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 4,
+        gap: SPACING.sm,
+    },
+    primaryButtonText: {
         color: COLORS.background,
-        fontSize: FONT_SIZE.lg,
-        fontWeight: "bold",
+        fontSize: FONT_SIZE.md,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
     },
+    secondaryButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 4,
+        gap: SPACING.sm,
+    },
+    secondaryButtonText: {
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.md,
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
+    },
+    specsCard: {
+        backgroundColor: COLORS.surface,
+        borderRadius: 8,
+        padding: SPACING.xl,
+        borderWidth: 1,
+        borderColor: COLORS.surfaceVariant,
+    },
+    specRow: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    specIcon: {
+        marginTop: 4,
+        marginRight: SPACING.md,
+    },
+    specLabel: {
+        fontSize: FONT_SIZE.sm,
+        fontFamily: 'monospace',
+        color: COLORS.textMuted,
+        textTransform: 'uppercase',
+        marginBottom: SPACING.xs,
+    },
+    specValue: {
+        fontSize: FONT_SIZE.xl,
+        fontWeight: 'bold',
+        color: COLORS.text,
+    },
+    divider: {
+        height: 1,
+        backgroundColor: COLORS.surfaceVariant,
+        marginVertical: SPACING.lg,
+    },
+    techContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: SPACING.sm,
+        marginTop: SPACING.sm,
+    },
+    techBadge: {
+        backgroundColor: 'rgba(100, 255, 218, 0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 4,
+    },
+    techText: {
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.sm,
+        fontFamily: 'monospace',
+    }
 });
