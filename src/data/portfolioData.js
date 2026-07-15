@@ -55,7 +55,10 @@ export const projects = [
         technologies: ["Java", "JavaFX", "CSS"],
         year: "2025",
         link: "https://github.com/SERV-DRV/WorkAs--Final-",
-        icon: "briefcase"
+        icon: "briefcase",
+        images: [
+            require("../../assets/projects/WorkAss/workass_1.jpeg")
+        ]
     },
     { 
         id: 3, 
@@ -65,7 +68,13 @@ export const projects = [
         technologies: ["JavaScript", "C#", "React Native", "React", "MySQL", "PostgreSQL", "MongoDB"],
         year: "2026",
         link: "https://github.com/IN6CM-GestorRestaurante",
-        icon: "utensils"
+        icon: "utensils",
+        images: [
+            require("../../assets/projects/GestorRestaurante/gestor_1.jpeg"),
+            require("../../assets/projects/GestorRestaurante/gestor_2.jpeg"),
+            require("../../assets/projects/GestorRestaurante/gestor_3.jpeg"),
+            require("../../assets/projects/GestorRestaurante/gestor_4.jpeg")
+        ]
     },
     { 
         id: 4, 
@@ -75,7 +84,14 @@ export const projects = [
         technologies: ["HTML5", "CSS3"],
         year: "2025",
         link: "https://github.com/SERV-DRV/PaginaPrueba_Deporte_Mania",
-        icon: "running"
+        icon: "running",
+        images: [
+            require("../../assets/projects/DeporteMania/deportemania_1.png"),
+            require("../../assets/projects/DeporteMania/deportemania_2.png"),
+            require("../../assets/projects/DeporteMania/deportemania_3.png"),
+            require("../../assets/projects/DeporteMania/deportemania_4.png"),
+            require("../../assets/projects/DeporteMania/deportemania_5.png")
+        ]
     },
     { 
         id: 5, 
@@ -85,6 +101,15 @@ export const projects = [
         technologies: ["Java", "CSS"],
         year: "2025",
         link: "https://github.com/SERV-DRV/Kinal-Familiar",
-        icon: "home"
+        icon: "home",
+        images: [
+            require("../../assets/projects/KinalFamiliar/kinal_1.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_2.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_3.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_4.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_5.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_6.jpeg"),
+            require("../../assets/projects/KinalFamiliar/kinal_7.jpeg")
+        ]
     },
 ];
