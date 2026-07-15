@@ -50,11 +50,11 @@ export const projects = [
         demoLink: "https://serv-drv.github.io/Agenda-Web/",
         icon: "address-book",
         images: [
-            require("../../assets/projects/agenda/agenda_1.png"),
-            require("../../assets/projects/agenda/agenda_2.png"),
-            require("../../assets/projects/agenda/agenda_3.png"),
-            require("../../assets/projects/agenda/agenda_4.png"),
-            require("../../assets/projects/agenda/agenda_5.png")
+            require("../../assets/projects/Agenda/agenda_1.png"),
+            require("../../assets/projects/Agenda/agenda_2.png"),
+            require("../../assets/projects/Agenda/agenda_3.png"),
+            require("../../assets/projects/Agenda/agenda_4.png"),
+            require("../../assets/projects/Agenda/agenda_5.png")
         ]
     },
     { 
