@@ -15,17 +15,17 @@ export const personalInfo = {
 };
 
 export const skills = [
-    { name: "CSS3", percentage: 85, icon: "css3-alt" },
-    { name: "JAVA", percentage: 80, icon: "java" },
-    { name: "JavaScript", percentage: 80, icon: "js-square" },
-    { name: "Git", percentage: 80, icon: "git-alt" },
-    { name: "MySQL", percentage: 75, icon: "database" },
-    { name: "React", percentage: 75, icon: "react" },
-    { name: "HTML5", percentage: 70, icon: "html5" },
-    { name: "Node.js", percentage: 70, icon: "node-js" },
-    { name: "MongoDB", percentage: 70, icon: "envira" },
-    { name: "PostgreSQL", percentage: 70, icon: "database" },
-    { name: "C#", percentage: 60, icon: "code" },
+    { name: "CSS3", percentage: 85, image: require("../../assets/iconsForHabilities/css3.jpg") },
+    { name: "JAVA", percentage: 80, image: require("../../assets/iconsForHabilities/java.png") },
+    { name: "JavaScript", percentage: 80, image: require("../../assets/iconsForHabilities/js.jpg") },
+    { name: "Git", percentage: 80, image: require("../../assets/iconsForHabilities/git.jpg") },
+    { name: "MySQL", percentage: 75, image: require("../../assets/iconsForHabilities/mysql.jpg") },
+    { name: "React", percentage: 75, image: require("../../assets/iconsForHabilities/react.jpg") },
+    { name: "HTML5", percentage: 70, image: require("../../assets/iconsForHabilities/html5.webp") },
+    { name: "Node.js", percentage: 70, image: require("../../assets/iconsForHabilities/nodejs.jpg") },
+    { name: "MongoDB", percentage: 70, image: require("../../assets/iconsForHabilities/mongodb.png") },
+    { name: "PostgreSQL", percentage: 70, image: require("../../assets/iconsForHabilities/postgresSql.jpg") },
+    { name: "C#", percentage: 60, image: require("../../assets/iconsForHabilities/c#.png") },
 ];
 
 export const projects = [
