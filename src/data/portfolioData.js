@@ -38,7 +38,14 @@ export const projects = [
         year: "2026",
         link: "https://github.com/SERV-DRV/GestorDeComentarios",
         demoLink: "https://serv-drv.github.io/Agenda-Web/",
-        icon: "address-book"
+        icon: "address-book",
+        images: [
+            require("../../assets/projects/agenda/agenda_1.png"),
+            require("../../assets/projects/agenda/agenda_2.png"),
+            require("../../assets/projects/agenda/agenda_3.png"),
+            require("../../assets/projects/agenda/agenda_4.png"),
+            require("../../assets/projects/agenda/agenda_5.png")
+        ]
     },
     { 
         id: 2, 

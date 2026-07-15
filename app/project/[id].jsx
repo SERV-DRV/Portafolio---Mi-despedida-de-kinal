@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -127,8 +127,19 @@ export default function ProjectDetailScreen() {
                                 </View>
                             </FadeInUp>
                         </View>
-
                     </View>
+
+                    {/* NEW SECTION: GALLERY */}
+                    {details.images && details.images.length > 0 && (
+                        <FadeInUp delay={500} style={styles.gallerySection}>
+                            <Text style={styles.sectionTitle}>Galería del Proyecto</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.galleryContainer}>
+                                {details.images.map((img, idx) => (
+                                    <Image key={idx} source={img} style={styles.galleryImage} resizeMode="cover" />
+                                ))}
+                            </ScrollView>
+                        </FadeInUp>
+                    )}
                 </View>
             </ScrollView>
         </View>
@@ -298,5 +309,19 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontSize: FONT_SIZE.sm,
         fontFamily: 'monospace',
+    },
+    gallerySection: {
+        marginTop: SPACING.xxl * 2,
+    },
+    galleryContainer: {
+        gap: SPACING.lg,
+        paddingBottom: SPACING.lg,
+    },
+    galleryImage: {
+        width: 300,
+        height: 200,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: COLORS.surfaceVariant,
     }
 });
