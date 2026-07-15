@@ -7,21 +7,53 @@ import ProjectCard from "../src/features/home/components/ProjectCard";
 import { personalInfo, skills, softSkills, projects } from "../src/data/portfolioData";
 
 // Animated entry component
-const FadeInUp = ({ delay, children, style }) => {
+const FadeInUp = ({ delay = 0, children, style, scrollY }) => {
     const opacity = useRef(new Animated.Value(0)).current;
     const translateY = useRef(new Animated.Value(30)).current;
+    const { height: windowHeight } = useWindowDimensions();
+    const hasAnimated = useRef(false);
+
+    const startAnimation = () => {
+        if (hasAnimated.current) return;
+        hasAnimated.current = true;
+        Animated.parallel([
+            Animated.timing(opacity, { toValue: 1, duration: 800, delay, useNativeDriver: true }),
+            Animated.spring(translateY, { toValue: 0, friction: 8, tension: 40, delay, useNativeDriver: true })
+        ]).start();
+    };
 
     useEffect(() => {
-        Animated.sequence([
-            Animated.delay(delay),
-            Animated.parallel([
-                Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
-                Animated.timing(translateY, { toValue: 0, duration: 800, useNativeDriver: true })
-            ])
-        ]).start();
-    }, []);
+        if (!scrollY) {
+            startAnimation();
+        }
+    }, [scrollY]);
 
-    return <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>;
+    const handleLayout = (e) => {
+        if (!scrollY || hasAnimated.current) return;
+        const { y } = e.nativeEvent.layout;
+        
+        if (y < windowHeight * 0.8) {
+            startAnimation();
+            return;
+        }
+
+        const listenerId = scrollY.addListener(({ value }) => {
+            if (value + windowHeight > y + 100) {
+                startAnimation();
+                scrollY.removeListener(listenerId);
+            }
+        });
+
+        return () => {
+            scrollY.removeListener(listenerId);
+        };
+    };
+
+    return (
+        <Animated.View onLayout={handleLayout} style={[style, { opacity, transform: [{ translateY }] }]}>
+            {children}
+        </Animated.View>
+    );
 };
 
 // Minimalist & Elegant Progress Bar
@@ -108,6 +140,7 @@ const SoftSkillCard = ({ skill, isDesktop }) => {
 export default function HomeScreen() {
     const router = useRouter();
     const { width } = useWindowDimensions();
+    const scrollY = useRef(new Animated.Value(0)).current;
 
     const handleProjectPress = (project) => {
         router.push(`/project/${project.id}`);
@@ -123,7 +156,15 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+            <Animated.ScrollView 
+                showsVerticalScrollIndicator={false} 
+                contentContainerStyle={styles.scrollContent}
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: true }
+                )}
+                scrollEventThrottle={16}
+            >
                 
                 {/* HERO SECTION */}
                 <View style={styles.heroSection}>
@@ -169,7 +210,7 @@ export default function HomeScreen() {
                     </View>
 
                     {/* QUOTE SECTION */}
-                    <FadeInUp delay={700}>
+                    <FadeInUp scrollY={scrollY} delay={100}>
                         <View style={styles.quoteContainer}>
                             <FontAwesome5 name="quote-left" size={30} color={COLORS.primary} style={styles.quoteIcon} />
                             <Text style={styles.quoteText}>
@@ -180,10 +221,9 @@ export default function HomeScreen() {
                 </View>
 
                 {/* SKILLS SECTION */}
-                <View style={styles.section}>
+                <FadeInUp scrollY={scrollY} delay={100} style={styles.section}>
                     <View style={styles.sectionInner}>
-                        <FadeInUp delay={200}>
-                            <View style={styles.sectionHeader}>
+                        <View style={styles.sectionHeader}>
                                 <Text style={styles.sectionNumber}>01.</Text>
                                 <Text style={styles.sectionTitle}>Habilidades</Text>
                                 <View style={styles.sectionLine} />
@@ -209,15 +249,14 @@ export default function HomeScreen() {
                                     <SoftSkillCard key={skill.name} skill={skill} isDesktop={isDesktop} />
                                 ))}
                             </View>
-                        </FadeInUp>
+                        </View>
                     </View>
-                </View>
+                </FadeInUp>
 
                 {/* PROJECTS SECTION */}
-                <View style={styles.section}>
+                <FadeInUp scrollY={scrollY} delay={100} style={styles.section}>
                     <View style={styles.sectionInner}>
-                        <FadeInUp delay={200}>
-                            <View style={styles.sectionHeader}>
+                        <View style={styles.sectionHeader}>
                                 <Text style={styles.sectionNumber}>02.</Text>
                                 <Text style={styles.sectionTitle}>Mis Proyectos</Text>
                                 <View style={styles.sectionLine} />
@@ -230,9 +269,9 @@ export default function HomeScreen() {
                                     </View>
                                 ))}
                             </View>
-                        </FadeInUp>
+                        </View>
                     </View>
-                </View>
+                </FadeInUp>
 
                 {/* FOOTER */}
                 <View style={[styles.footer, !isDesktop && { paddingBottom: 60 }]}>
@@ -254,7 +293,7 @@ export default function HomeScreen() {
                     )}
                     <Text style={[styles.footerText, !isDesktop && { textAlign: 'center' }]}>Diseñado y construido por {personalInfo.name}</Text>
                 </View>
-            </ScrollView>
+            </Animated.ScrollView>
 
             {/* FIXED SIDEBARS (Desktop only) */}
             {isDesktop && (
