@@ -1,21 +1,24 @@
+// Updated theme - new design
 export const COLORS = {
-    primary: "#00D26A",
-    primaryDark: "#00A852",
-    primaryLight: "#4DFFA0",
-    secondary: "#2B69FB",
-    background: "#0A0A0A",
-    surface: "#FFFFFF",
-    surfaceVariant: "#F2F2F7",
+    primary: "#00F0FF", // Cyber Blue
+    primaryDark: "#00B8C4",
+    primaryLight: "#5CFAFF",
+    secondary: "#FF007F", // Neon Pink
+    background: "#0A0A0A", // Deep black/gray
+    surface: "rgba(30, 41, 59, 0.4)", // Glassmorphism base
+    surfaceVariant: "rgba(255, 255, 255, 0.05)",
     text: "#FFFFFF",
-    textLight: "#8E8E93",
-    textMuted: "#AEAEB2", 
-    error: "#FF3B30", 
-    success: "#00D26A", 
-    warning: "#FF9500", 
-    info: "#2B69FB",
-    border: "#000000",
-    divider: "#000000", 
-    accent: "#2B69FB",
+    textLight: "#A0AEC0",
+    textMuted: "#718096", 
+    error: "#EF4444", 
+    success: "#10B981", 
+    warning: "#F59E0B", 
+    info: "#00F0FF",
+    border: "rgba(255, 255, 255, 0.1)",
+    divider: "rgba(255, 255, 255, 0.05)", 
+    accent: "#FF007F",
+    gradientStart: "#00F0FF",
+    gradientEnd: "#FF007F",
 };
 
 export const SPACING = {
@@ -35,28 +38,29 @@ export const FONT_SIZE = {
     xl: 20,
     xxl: 24,
     huge: 32,
+    giant: 56,
 };
 
 export const SHADOWS = {
-    sm: {
-        shadowColor: COLORS.primaryDark,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
+    neonBlue: {
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 15,
+        elevation: 10,
     },
-    md: {
-        shadowColor: COLORS.primaryDark,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-        elevation: 4,
+    neonPink: {
+        shadowColor: COLORS.secondary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 15,
+        elevation: 10,
     },
-    lg: {
-        shadowColor: COLORS.primaryDark,
+    glass: {
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.2,
-        shadowRadius: 16,
+        shadowOpacity: 0.4,
+        shadowRadius: 24,
         elevation: 8,
     },
 };

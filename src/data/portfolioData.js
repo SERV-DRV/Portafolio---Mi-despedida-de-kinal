@@ -15,17 +15,17 @@ export const personalInfo = {
 };
 
 export const skills = [
-    { name: "CSS3", percentage: 85 },
-    { name: "JAVA", percentage: 80 },
-    { name: "JavaScript", percentage: 80 },
-    { name: "Git", percentage: 80 },
-    { name: "MySQL", percentage: 75 },
-    { name: "React", percentage: 75 },
-    { name: "HTML5", percentage: 70 },
-    { name: "Node.js", percentage: 70 },
-    { name: "MongoDB", percentage: 70 },
-    { name: "PostgreSQL", percentage: 70 },
-    { name: "C#", percentage: 60 },
+    { name: "CSS3", percentage: 85, icon: "css3-alt" },
+    { name: "JAVA", percentage: 80, icon: "java" },
+    { name: "JavaScript", percentage: 80, icon: "js-square" },
+    { name: "Git", percentage: 80, icon: "git-alt" },
+    { name: "MySQL", percentage: 75, icon: "database" },
+    { name: "React", percentage: 75, icon: "react" },
+    { name: "HTML5", percentage: 70, icon: "html5" },
+    { name: "Node.js", percentage: 70, icon: "node-js" },
+    { name: "MongoDB", percentage: 70, icon: "envira" },
+    { name: "PostgreSQL", percentage: 70, icon: "database" },
+    { name: "C#", percentage: 60, icon: "code" },
 ];
 
 export const projects = [
