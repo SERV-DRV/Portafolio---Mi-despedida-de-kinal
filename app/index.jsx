@@ -2,13 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Image, Animated } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { COLORS, SPACING, FONT_SIZE, SHADOWS } from "../src/shared/constants/theme";
+import { COLORS, SPACING, FONT_SIZE } from "../src/shared/constants/theme";
 import ProjectCard from "../src/features/home/components/ProjectCard";
 import { personalInfo, skills, projects } from "../src/data/portfolioData";
 
 // Animated entry component
-const FadeInView = ({ delay, children, style }) => {
+const FadeInUp = ({ delay, children, style }) => {
     const opacity = useRef(new Animated.Value(0)).current;
     const translateY = useRef(new Animated.Value(30)).current;
 
@@ -25,15 +24,45 @@ const FadeInView = ({ delay, children, style }) => {
     return <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>;
 };
 
-const TechWidget = ({ skill }) => {
+// Exact replica of the custom progress bar from the image
+const CustomProgressBar = ({ skill, index }) => {
+    const widthAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.sequence([
+            Animated.delay(800 + (index * 100)),
+            Animated.timing(widthAnim, {
+                toValue: skill.percentage,
+                duration: 1000,
+                useNativeDriver: false 
+            })
+        ]).start();
+    }, []);
+
     return (
-        <View style={styles.techWidgetCard}>
-            <View style={styles.techImageContainer}>
-                <Image source={skill.image} style={styles.techImage} resizeMode="contain" />
+        <View style={styles.skillRow}>
+            {/* The white circle with the image inside */}
+            <View style={styles.skillIconCircle}>
+                <Image source={skill.image} style={styles.skillIconImage} resizeMode="contain" />
             </View>
-            <Text style={styles.techName}>{skill.name}</Text>
-            <View style={styles.techPercentBadge}>
-                <Text style={styles.techPercentText}>{skill.percentage}%</Text>
+            
+            {/* The colored pill container */}
+            <View style={[styles.skillPillBg, { backgroundColor: skill.color }]}>
+                {/* The percentage text on the left */}
+                <Text style={styles.skillPercentageText}>{skill.percentage}%</Text>
+                
+                {/* The white pill fill */}
+                <View style={styles.skillPillTrack}>
+                    <Animated.View style={[
+                        styles.skillPillFill, 
+                        { 
+                            width: widthAnim.interpolate({
+                                inputRange: [0, 100],
+                                outputRange: ['0%', '100%']
+                            }) 
+                        }
+                    ]} />
+                </View>
             </View>
         </View>
     );
@@ -54,135 +83,115 @@ export default function HomeScreen() {
     };
 
     const isDesktop = width > 900;
-    const isTablet = width > 600 && width <= 900;
-    
-    // Calculate dynamic widths for Bento Box
-    const bentoFull = '100%';
-    const bentoHalf = isDesktop ? '49%' : '100%';
 
     return (
         <View style={styles.container}>
-            <LinearGradient
-                colors={['#050505', '#0a0a1a', '#050505']}
-                style={StyleSheet.absoluteFill}
-            />
-            
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 
-                <View style={styles.bentoGrid}>
-                    
-                    {/* 1. HERO WIDGET (Profile, Intro) */}
-                    <FadeInView delay={100} style={[styles.widget, { width: bentoHalf }]}>
-                        <LinearGradient colors={[COLORS.surface, 'rgba(30, 41, 59, 0.1)']} style={styles.widgetGradient} />
-                        
-                        <View style={styles.heroTopRow}>
-                            <View style={styles.glowRing}>
-                                <Image source={require('../assets/images/me.jpg')} style={styles.profileImage} />
-                            </View>
-                            <View style={styles.heroTextCol}>
-                                <Text style={styles.greetingText}>Hola, soy</Text>
-                                <Text style={styles.nameText}>{personalInfo.name.split(' ')[0]}</Text>
-                                <Text style={styles.titleText}>{personalInfo.title}</Text>
-                            </View>
-                        </View>
-                        
-                        <Text style={styles.bioText}>{personalInfo.bio}</Text>
-                        
-                        <View style={styles.socialRow}>
-                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.github)} style={styles.socialBtn}>
-                                <FontAwesome5 name="github" size={20} color={COLORS.primary} />
+                {/* HERO SECTION */}
+                <View style={styles.heroSection}>
+                    <View style={styles.heroInner}>
+                        <FadeInUp delay={100}>
+                            <Text style={styles.heroGreeting}>Hola, mi nombre es</Text>
+                        </FadeInUp>
+                        <FadeInUp delay={200}>
+                            <Text style={styles.heroName}>{personalInfo.name.split(' ')[0]} {personalInfo.name.split(' ')[1]}.</Text>
+                        </FadeInUp>
+                        <FadeInUp delay={300}>
+                            <Text style={styles.heroTitle}>{personalInfo.title}.</Text>
+                        </FadeInUp>
+                        <FadeInUp delay={400}>
+                            <Text style={styles.heroBio}>{personalInfo.bio}</Text>
+                        </FadeInUp>
+                        <FadeInUp delay={500}>
+                            <TouchableOpacity 
+                                style={styles.heroButton}
+                                onPress={() => handleSocialPress(personalInfo.links.github)}
+                            >
+                                <Text style={styles.heroButtonText}>Ver mi Github</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.linkedin)} style={styles.socialBtn}>
-                                <FontAwesome5 name="linkedin" size={20} color={COLORS.primary} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.email)} style={styles.socialBtn}>
-                                <FontAwesome5 name="envelope" size={20} color={COLORS.primary} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.compuTrabajo)} style={styles.socialBtn}>
-                                <FontAwesome5 name="briefcase" size={20} color={COLORS.primary} />
-                            </TouchableOpacity>
-                        </View>
-                    </FadeInView>
-
-                    {/* 2. EDUCATION & DATA WIDGET */}
-                    <FadeInView delay={200} style={[styles.widget, { width: bentoHalf }]}>
-                        <LinearGradient colors={['rgba(255, 0, 127, 0.1)', 'rgba(0, 0, 0, 0)']} style={styles.widgetGradient} />
-                        
-                        <Text style={styles.widgetTitle}>Información</Text>
-                        
-                        <View style={styles.infoGrid}>
-                            <View style={styles.infoItem}>
-                                <FontAwesome5 name="calendar-alt" size={24} color={COLORS.secondary} />
-                                <View style={styles.infoTextContainer}>
-                                    <Text style={styles.infoLabel}>Edad</Text>
-                                    <Text style={styles.infoValue}>{personalInfo.age} años</Text>
-                                </View>
-                            </View>
-                            
-                            <View style={styles.infoItem}>
-                                <FontAwesome5 name="user-ninja" size={24} color={COLORS.secondary} />
-                                <View style={styles.infoTextContainer}>
-                                    <Text style={styles.infoLabel}>Alias</Text>
-                                    <Text style={styles.infoValue}>{personalInfo.alias}</Text>
-                                </View>
-                            </View>
-                            
-                            <View style={[styles.infoItem, { width: '100%', marginTop: SPACING.md }]}>
-                                <FontAwesome5 name="graduation-cap" size={24} color={COLORS.primary} />
-                                <View style={styles.infoTextContainer}>
-                                    <Text style={styles.infoLabel}>Formación Académica</Text>
-                                    <Text style={styles.infoValue}>{personalInfo.education}</Text>
-                                    <Text style={styles.infoSubValue}>{personalInfo.institution}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </FadeInView>
-
-                    {/* 3. TECHNOLOGIES CAROUSEL WIDGET */}
-                    <FadeInView delay={300} style={[styles.widget, { width: bentoFull, paddingHorizontal: 0, paddingBottom: 0 }]}>
-                        <LinearGradient colors={['rgba(0, 240, 255, 0.1)', 'rgba(0, 0, 0, 0)']} style={styles.widgetGradient} />
-                        
-                        <Text style={[styles.widgetTitle, { paddingHorizontal: SPACING.xl }]}>Tecnologías</Text>
-                        
-                        <ScrollView 
-                            horizontal 
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.techCarouselContent}
-                            snapToInterval={140 + SPACING.md} 
-                            decelerationRate="fast"
-                        >
-                            {skills.map((skill) => (
-                                <TechWidget key={skill.name} skill={skill} />
-                            ))}
-                        </ScrollView>
-                    </FadeInView>
-
-                    {/* 4. PROJECTS WIDGET */}
-                    <FadeInView delay={400} style={[styles.widget, { width: bentoFull, paddingHorizontal: 0, backgroundColor: 'transparent', borderWidth: 0 }]}>
-                        <Text style={[styles.widgetTitle, { paddingHorizontal: SPACING.xl, fontSize: FONT_SIZE.huge }]}>Mis Proyectos</Text>
-                        
-                        <ScrollView 
-                            horizontal 
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.projectsCarouselContent}
-                            snapToInterval={width > 768 ? 400 + SPACING.md : (width * 0.85) + SPACING.md}
-                            decelerationRate="fast"
-                        >
-                            {projects.map((project) => (
-                                <View key={project.id} style={{ width: width > 768 ? 400 : width * 0.85 }}>
-                                    <ProjectCard project={project} onPress={() => handleProjectPress(project)} />
-                                </View>
-                            ))}
-                        </ScrollView>
-                    </FadeInView>
-
+                        </FadeInUp>
+                    </View>
                 </View>
 
-                {/* FOOTER WIDGET */}
-                <View style={styles.footerBox}>
-                    <Text style={styles.footerTextWhite}>© {new Date().getFullYear()} {personalInfo.name}</Text>
+                {/* SKILLS SECTION */}
+                <View style={styles.section}>
+                    <View style={styles.sectionInner}>
+                        <FadeInUp delay={200}>
+                            <View style={styles.sectionHeader}>
+                                <Text style={styles.sectionNumber}>01.</Text>
+                                <Text style={styles.sectionTitle}>Habilidades</Text>
+                                <View style={styles.sectionLine} />
+                            </View>
+                            
+                            <Text style={styles.sectionSubtitle}>
+                                He trabajado con diferentes tecnologías web y móviles. Aquí hay algunas de mis principales habilidades:
+                            </Text>
+
+                            <View style={styles.skillsContainer}>
+                                {skills.map((skill, index) => (
+                                    <CustomProgressBar key={skill.name} skill={skill} index={index} />
+                                ))}
+                            </View>
+                        </FadeInUp>
+                    </View>
+                </View>
+
+                {/* PROJECTS SECTION */}
+                <View style={styles.section}>
+                    <View style={styles.sectionInner}>
+                        <FadeInUp delay={200}>
+                            <View style={styles.sectionHeader}>
+                                <Text style={styles.sectionNumber}>02.</Text>
+                                <Text style={styles.sectionTitle}>Mis Proyectos</Text>
+                                <View style={styles.sectionLine} />
+                            </View>
+
+                            <View style={styles.projectsGrid}>
+                                {projects.map((project) => (
+                                    <View key={project.id} style={{ width: isDesktop ? '48%' : '100%', marginBottom: SPACING.xl }}>
+                                        <ProjectCard project={project} onPress={() => handleProjectPress(project)} />
+                                    </View>
+                                ))}
+                            </View>
+                        </FadeInUp>
+                    </View>
+                </View>
+
+                {/* FOOTER */}
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>Diseñado y construido por {personalInfo.name}</Text>
                 </View>
             </ScrollView>
+
+            {/* FIXED SIDEBARS (Desktop only) */}
+            {isDesktop && (
+                <>
+                    {/* Left Sidebar - Socials */}
+                    <View style={styles.leftSidebar}>
+                        <View style={styles.sidebarIconList}>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.github)} style={styles.sidebarIcon}>
+                                <FontAwesome5 name="github" size={20} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.linkedin)} style={styles.sidebarIcon}>
+                                <FontAwesome5 name="linkedin" size={20} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.compuTrabajo)} style={styles.sidebarIcon}>
+                                <FontAwesome5 name="briefcase" size={20} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.sidebarLine} />
+                    </View>
+
+                    {/* Right Sidebar - Email */}
+                    <View style={styles.rightSidebar}>
+                        <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.email)} style={styles.emailContainer}>
+                            <Text style={styles.emailText}>{personalInfo.links.email.replace('mailto:', '')}</Text>
+                        </TouchableOpacity>
+                        <View style={styles.sidebarLine} />
+                    </View>
+                </>
+            )}
         </View>
     );
 }
@@ -190,204 +199,219 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.background,
     },
     scrollContent: {
-        paddingVertical: SPACING.xl,
+        paddingTop: SPACING.xxl,
+        paddingBottom: SPACING.xxl,
         alignItems: 'center',
     },
-    bentoGrid: {
+    heroSection: {
+        minHeight: '80vh',
         width: '100%',
-        maxWidth: 1200,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: SPACING.lg,
-        paddingHorizontal: SPACING.lg,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        paddingHorizontal: SPACING.xl,
+        marginBottom: SPACING.xxl * 2,
     },
-    widget: {
-        backgroundColor: COLORS.surface,
-        borderRadius: 32,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        padding: SPACING.xl,
-        overflow: 'hidden',
-        position: 'relative',
-        ...SHADOWS.glass,
-        marginBottom: SPACING.sm,
+    heroInner: {
+        maxWidth: 1000,
+        width: '100%',
+        alignSelf: 'center',
     },
-    widgetGradient: {
-        ...StyleSheet.absoluteFillObject,
-        opacity: 0.5,
-    },
-    widgetTitle: {
-        fontSize: FONT_SIZE.xxl,
-        fontWeight: '900',
-        color: COLORS.text,
-        marginBottom: SPACING.lg,
-        letterSpacing: -1,
-    },
-    
-    // Hero Styles
-    heroTopRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.lg,
-        marginBottom: SPACING.lg,
-    },
-    glowRing: {
-        padding: 4,
-        borderRadius: 50,
-        backgroundColor: COLORS.surfaceVariant,
-        borderWidth: 2,
-        borderColor: COLORS.primary,
-        ...SHADOWS.neonBlue,
-    },
-    profileImage: {
-        width: 90,
-        height: 90,
-        borderRadius: 45,
-    },
-    heroTextCol: {
-        flex: 1,
-    },
-    greetingText: {
-        fontSize: FONT_SIZE.md,
+    heroGreeting: {
         color: COLORS.primary,
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: 2,
-    },
-    nameText: {
-        fontSize: 40,
-        fontWeight: '900',
-        color: COLORS.text,
-        letterSpacing: -1,
-        lineHeight: 44,
-    },
-    titleText: {
-        fontSize: FONT_SIZE.lg,
-        color: COLORS.secondary,
-        fontWeight: '600',
-    },
-    bioText: {
         fontSize: FONT_SIZE.md,
-        color: COLORS.textLight,
-        lineHeight: 26,
+        fontFamily: 'monospace',
+        marginBottom: SPACING.md,
+        letterSpacing: 1,
+    },
+    heroName: {
+        color: COLORS.text,
+        fontSize: 60,
+        fontWeight: '900',
+        letterSpacing: -1,
+        lineHeight: 70,
+        marginBottom: 10,
+    },
+    heroTitle: {
+        color: COLORS.secondary,
+        fontSize: 50,
+        fontWeight: '800',
+        letterSpacing: -1,
+        lineHeight: 60,
         marginBottom: SPACING.xl,
     },
-    socialRow: {
-        flexDirection: 'row',
-        gap: SPACING.md,
-    },
-    socialBtn: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: COLORS.border,
-    },
-
-    // Info Styles
-    infoGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: SPACING.lg,
-    },
-    infoItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.md,
-        width: '45%',
-        minWidth: 150,
-    },
-    infoTextContainer: {
-        flex: 1,
-    },
-    infoLabel: {
-        fontSize: FONT_SIZE.sm,
-        color: COLORS.textMuted,
-        textTransform: 'uppercase',
-        fontWeight: '700',
-    },
-    infoValue: {
-        fontSize: FONT_SIZE.lg,
-        color: COLORS.text,
-        fontWeight: '800',
-    },
-    infoSubValue: {
-        fontSize: FONT_SIZE.sm,
+    heroBio: {
         color: COLORS.textLight,
+        fontSize: FONT_SIZE.lg,
+        lineHeight: 30,
+        maxWidth: 540,
+        marginBottom: SPACING.xxl,
+    },
+    heroButton: {
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        paddingVertical: 18,
+        paddingHorizontal: 28,
+        borderRadius: 4,
+        alignSelf: 'flex-start',
+    },
+    heroButtonText: {
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.sm,
+        fontFamily: 'monospace',
     },
 
-    // Tech Widget Styles
-    techCarouselContent: {
+    section: {
+        width: '100%',
         paddingHorizontal: SPACING.xl,
-        paddingBottom: SPACING.xl,
+        marginBottom: 100,
+    },
+    sectionInner: {
+        maxWidth: 1000,
+        width: '100%',
+        alignSelf: 'center',
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: SPACING.xl,
+    },
+    sectionNumber: {
+        color: COLORS.primary,
+        fontSize: FONT_SIZE.xl,
+        fontFamily: 'monospace',
+        marginRight: 10,
+    },
+    sectionTitle: {
+        color: COLORS.text,
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginRight: 20,
+    },
+    sectionLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: COLORS.surfaceVariant,
+        maxWidth: 300,
+    },
+    sectionSubtitle: {
+        color: COLORS.textLight,
+        fontSize: FONT_SIZE.lg,
+        marginBottom: SPACING.xl * 1.5,
+        maxWidth: 600,
+        lineHeight: 28,
+    },
+
+    // Custom Progress Bar Styles
+    skillsContainer: {
+        maxWidth: 800,
         gap: SPACING.md,
     },
-    techWidgetCard: {
-        width: 140,
-        height: 160,
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        borderRadius: 24,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        padding: SPACING.md,
+    skillRow: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        marginBottom: SPACING.md,
     },
-    techImageContainer: {
+    skillIconCircle: {
         width: 60,
         height: 60,
-        marginBottom: SPACING.sm,
+        borderRadius: 30,
+        backgroundColor: '#fff',
         justifyContent: 'center',
         alignItems: 'center',
+        marginRight: SPACING.md,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        elevation: 5,
+        padding: 10,
+        zIndex: 10,
     },
-    techImage: {
+    skillIconImage: {
         width: '100%',
         height: '100%',
+        borderRadius: 20,
     },
-    techName: {
+    skillPillBg: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 30,
+        height: 50,
+        paddingHorizontal: SPACING.lg,
+    },
+    skillPercentageText: {
+        color: '#fff',
         fontSize: FONT_SIZE.md,
         fontWeight: '700',
-        color: COLORS.text,
-        textAlign: 'center',
-        marginBottom: SPACING.xs,
+        width: 50, // Fixed width so bars align perfectly
+        marginRight: SPACING.sm,
     },
-    techPercentBadge: {
-        backgroundColor: 'rgba(0, 240, 255, 0.1)',
-        paddingHorizontal: 8,
-        paddingVertical: 2,
+    skillPillTrack: {
+        flex: 1,
+        height: 24,
+        justifyContent: 'center',
+    },
+    skillPillFill: {
+        height: '100%',
+        backgroundColor: '#fff',
         borderRadius: 12,
-        borderWidth: 1,
-        borderColor: 'rgba(0, 240, 255, 0.3)',
-    },
-    techPercentText: {
-        color: COLORS.primary,
-        fontSize: FONT_SIZE.xs,
-        fontWeight: '800',
+        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 12,
     },
 
-    // Projects Styles
-    projectsCarouselContent: {
-        paddingHorizontal: SPACING.xl,
-        gap: SPACING.md,
-        paddingBottom: SPACING.xxl,
+    projectsGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
 
     // Footer
-    footerBox: {
-        width: '100%',
+    footer: {
         paddingVertical: SPACING.xl,
         alignItems: 'center',
-        marginTop: SPACING.xl,
     },
-    footerTextWhite: {
-        color: COLORS.textMuted,
+    footerText: {
+        color: COLORS.textLight,
         fontSize: FONT_SIZE.sm,
-        fontWeight: '600',
+        fontFamily: 'monospace',
+    },
+
+    // Fixed Sidebars
+    leftSidebar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 40,
+        alignItems: 'center',
+    },
+    sidebarIconList: {
+        gap: SPACING.lg,
+        marginBottom: SPACING.lg,
+    },
+    sidebarIcon: {
+        padding: 5,
+    },
+    sidebarLine: {
+        width: 1,
+        height: 90,
+        backgroundColor: COLORS.textLight,
+    },
+    rightSidebar: {
+        position: 'absolute',
+        bottom: 0,
+        right: 40,
+        alignItems: 'center',
+    },
+    emailContainer: {
+        marginBottom: SPACING.lg,
+        transform: [{ rotate: '90deg' }, { translateY: -15 }, { translateX: -60 }],
+    },
+    emailText: {
+        color: COLORS.textLight,
+        fontFamily: 'monospace',
+        fontSize: FONT_SIZE.xs,
+        letterSpacing: 2,
     },
 });

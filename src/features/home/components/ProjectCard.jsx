@@ -1,22 +1,21 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, Animated } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { COLORS, SPACING, FONT_SIZE, SHADOWS } from "../../../shared/constants/theme";
+import { COLORS, SPACING, FONT_SIZE } from "../../../shared/constants/theme";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 const ProjectCard = ({ project, onPress }) => {
-    const scaleAnim = useRef(new Animated.Value(1)).current;
+    const translateYAnim = useRef(new Animated.Value(0)).current;
 
     const handlePressIn = () => {
-        Animated.spring(scaleAnim, {
-            toValue: 0.95,
+        Animated.spring(translateYAnim, {
+            toValue: -5,
             useNativeDriver: true,
         }).start();
     };
 
     const handlePressOut = () => {
-        Animated.spring(scaleAnim, {
-            toValue: 1,
+        Animated.spring(translateYAnim, {
+            toValue: 0,
             friction: 3,
             tension: 40,
             useNativeDriver: true,
@@ -29,51 +28,31 @@ const ProjectCard = ({ project, onPress }) => {
             onPressOut={handlePressOut}
             onPress={onPress}
         >
-            <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
-                <View style={styles.imageContainer}>
-                    <LinearGradient
-                        colors={[COLORS.gradientStart, COLORS.gradientEnd]}
-                        style={styles.gradient}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                    >
-                        <FontAwesome5 name={project.icon || "code"} size={72} color={COLORS.text} />
-                        
-                        {/* Overlay to give a bit of depth */}
-                        <LinearGradient
-                            colors={['transparent', COLORS.surface]}
-                            style={StyleSheet.absoluteFill}
-                            start={{ x: 0, y: 0.5 }}
-                            end={{ x: 0, y: 1 }}
-                        />
-                    </LinearGradient>
+            <Animated.View style={[styles.card, { transform: [{ translateY: translateYAnim }] }]}>
+                <View style={styles.header}>
+                    <FontAwesome5 name="folder" size={40} color={COLORS.primary} />
+                    <View style={styles.yearBadge}>
+                        <Text style={styles.yearText}>{project.year}</Text>
+                    </View>
                 </View>
-                <View style={styles.content}>
-                    <View style={styles.headerRow}>
-                        <Text style={styles.name} numberOfLines={1}>{project.name}</Text>
-                        <View style={styles.yearBadge}>
-                            <Text style={styles.yearText}>{project.year}</Text>
-                        </View>
-                    </View>
-                    <Text style={styles.description}>{project.description}</Text>
-                    
-                    <ScrollView 
-                        horizontal 
-                        showsHorizontalScrollIndicator={false}
-                        style={styles.techScroll}
-                        contentContainerStyle={styles.techContainer}
-                    >
-                        {project.technologies?.slice(0, 4).map((tech, index) => (
-                            <View key={index} style={styles.techBadge}>
-                                <Text style={styles.techText}>{tech}</Text>
-                            </View>
-                        ))}
-                    </ScrollView>
-                    
-                    <View style={styles.footer}>
-                        <MaterialIcons name="arrow-forward" size={20} color={COLORS.primary} />
-                        <Text style={styles.footerText}>Ver proyecto</Text>
-                    </View>
+
+                <Text style={styles.name} numberOfLines={1}>{project.name}</Text>
+                <Text style={styles.description}>{project.description}</Text>
+                
+                <ScrollView 
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.techScroll}
+                    contentContainerStyle={styles.techContainer}
+                >
+                    {project.technologies?.slice(0, 4).map((tech, index) => (
+                        <Text key={index} style={styles.techText}>{tech}</Text>
+                    ))}
+                </ScrollView>
+                
+                <View style={styles.footer}>
+                    <MaterialIcons name="arrow-forward" size={16} color={COLORS.primary} />
+                    <Text style={styles.footerText}>Ver proyecto</Text>
                 </View>
             </Animated.View>
         </TouchableWithoutFeedback>
@@ -83,89 +62,68 @@ const ProjectCard = ({ project, onPress }) => {
 const styles = StyleSheet.create({
     card: {
         backgroundColor: COLORS.surface,
-        borderRadius: 24,
-        overflow: "hidden",
-        marginBottom: SPACING.md, 
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        ...SHADOWS.glass,
+        borderRadius: 8,
+        padding: SPACING.xl,
+        height: '100%',
+        minHeight: 300,
+        justifyContent: 'space-between',
+        shadowColor: '#020c1b',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.5,
+        shadowRadius: 20,
+        elevation: 10,
     },
-    imageContainer: {
-        width: "100%",
-        height: 180,
-    },
-    gradient: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    content: {
-        padding: SPACING.lg,
-    },
-    headerRow: {
+    header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: SPACING.sm,
-    },
-    name: {
-        fontSize: FONT_SIZE.xxl,
-        fontWeight: "800", 
-        color: COLORS.text, 
-        letterSpacing: -0.5,
-        flex: 1,
+        alignItems: "flex-start",
+        marginBottom: SPACING.lg,
     },
     yearBadge: {
-        backgroundColor: 'rgba(255, 0, 127, 0.15)', // Neon pink translucent
+        backgroundColor: COLORS.surfaceVariant,
         paddingHorizontal: SPACING.sm,
-        paddingVertical: SPACING.xs,
-        borderRadius: 8,
-        marginLeft: SPACING.sm,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 0, 127, 0.3)',
+        paddingVertical: 4,
+        borderRadius: 4,
     },
     yearText: {
-        fontSize: FONT_SIZE.sm,
-        fontWeight: "800",
-        color: COLORS.secondary,
+        fontSize: FONT_SIZE.xs,
+        fontFamily: 'monospace',
+        color: COLORS.primary,
+    },
+    name: {
+        fontSize: FONT_SIZE.xl,
+        fontWeight: "bold", 
+        color: COLORS.text, 
+        marginBottom: SPACING.sm,
     },
     description: {
         fontSize: FONT_SIZE.md,
         color: COLORS.textLight,
         lineHeight: 24,
-        marginBottom: SPACING.md,
+        marginBottom: SPACING.xl,
+        flex: 1,
     },
     techScroll: {
         marginBottom: SPACING.md,
     },
     techContainer: {
-        gap: SPACING.sm,
-    },
-    techBadge: {
-        backgroundColor: COLORS.surfaceVariant,
-        paddingHorizontal: SPACING.sm,
-        paddingVertical: SPACING.xs,
-        borderRadius: 6,
-        borderWidth: 1,
-        borderColor: COLORS.border,
+        gap: SPACING.md,
     },
     techText: {
-        fontSize: FONT_SIZE.sm,
-        fontWeight: "600",
-        color: COLORS.primaryLight,
+        fontSize: FONT_SIZE.xs,
+        fontFamily: 'monospace',
+        color: COLORS.textMuted,
     },
     footer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: SPACING.xs,
-        marginTop: SPACING.xs,
+        marginTop: 'auto',
     },
     footerText: {
-        fontSize: FONT_SIZE.md,
-        fontWeight: "700",
+        fontSize: FONT_SIZE.sm,
+        fontFamily: 'monospace',
         color: COLORS.primary,
-        textTransform: 'uppercase',
-        letterSpacing: 1,
     }
 });
 

@@ -15,17 +15,17 @@ export const personalInfo = {
 };
 
 export const skills = [
-    { name: "CSS3", percentage: 85, image: require("../../assets/iconsForHabilities/css3.jpg") },
-    { name: "JAVA", percentage: 80, image: require("../../assets/iconsForHabilities/java.png") },
-    { name: "JavaScript", percentage: 80, image: require("../../assets/iconsForHabilities/js.jpg") },
-    { name: "Git", percentage: 80, image: require("../../assets/iconsForHabilities/git.jpg") },
-    { name: "MySQL", percentage: 75, image: require("../../assets/iconsForHabilities/mysql.jpg") },
-    { name: "React", percentage: 75, image: require("../../assets/iconsForHabilities/react.jpg") },
-    { name: "HTML5", percentage: 70, image: require("../../assets/iconsForHabilities/html5.webp") },
-    { name: "Node.js", percentage: 70, image: require("../../assets/iconsForHabilities/nodejs.jpg") },
-    { name: "MongoDB", percentage: 70, image: require("../../assets/iconsForHabilities/mongodb.png") },
-    { name: "PostgreSQL", percentage: 70, image: require("../../assets/iconsForHabilities/postgresSql.jpg") },
-    { name: "C#", percentage: 60, image: require("../../assets/iconsForHabilities/c#.png") },
+    { name: "CSS3", percentage: 85, color: "#2a9d8f", image: require("../../assets/iconsForHabilities/css3.jpg") },
+    { name: "JAVA", percentage: 80, color: "#48cae4", image: require("../../assets/iconsForHabilities/java.png") },
+    { name: "JavaScript", percentage: 80, color: "#7209b7", image: require("../../assets/iconsForHabilities/js.jpg") },
+    { name: "Git", percentage: 80, color: "#f72585", image: require("../../assets/iconsForHabilities/git.jpg") },
+    { name: "MySQL", percentage: 75, color: "#f4a261", image: require("../../assets/iconsForHabilities/mysql.jpg") },
+    { name: "React", percentage: 75, color: "#48cae4", image: require("../../assets/iconsForHabilities/react.jpg") },
+    { name: "HTML5", percentage: 70, color: "#f4a261", image: require("../../assets/iconsForHabilities/html5.webp") },
+    { name: "Node.js", percentage: 70, color: "#2a9d8f", image: require("../../assets/iconsForHabilities/nodejs.jpg") },
+    { name: "MongoDB", percentage: 70, color: "#2a9d8f", image: require("../../assets/iconsForHabilities/mongodb.png") },
+    { name: "PostgreSQL", percentage: 70, color: "#48cae4", image: require("../../assets/iconsForHabilities/postgresSql.jpg") },
+    { name: "C#", percentage: 60, color: "#7209b7", image: require("../../assets/iconsForHabilities/c#.png") },
 ];
 
 export const projects = [

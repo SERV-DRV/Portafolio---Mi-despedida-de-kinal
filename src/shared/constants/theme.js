@@ -1,24 +1,24 @@
-// Updated theme - new design
+// Updated theme - Brittany Chiang Style (Navy & Cyan)
 export const COLORS = {
-    primary: "#00F0FF", // Cyber Blue
-    primaryDark: "#00B8C4",
-    primaryLight: "#5CFAFF",
-    secondary: "#FF007F", // Neon Pink
-    background: "#0A0A0A", // Deep black/gray
-    surface: "rgba(30, 41, 59, 0.4)", // Glassmorphism base
-    surfaceVariant: "rgba(255, 255, 255, 0.05)",
-    text: "#FFFFFF",
-    textLight: "#A0AEC0",
-    textMuted: "#718096", 
+    primary: "#64ffda", // Cyan/Mint
+    primaryDark: "#00b39e",
+    primaryLight: "#affff1",
+    secondary: "#8892b0", // Slate
+    background: "#0a192f", // Deep Navy
+    surface: "#112240", // Light Navy
+    surfaceVariant: "#233554", // Lightest Navy
+    text: "#ccd6f6", // Lightest Slate
+    textLight: "#a8b2d1", // Light Slate
+    textMuted: "#8892b0", // Slate
     error: "#EF4444", 
-    success: "#10B981", 
+    success: "#64ffda", 
     warning: "#F59E0B", 
-    info: "#00F0FF",
-    border: "rgba(255, 255, 255, 0.1)",
-    divider: "rgba(255, 255, 255, 0.05)", 
-    accent: "#FF007F",
-    gradientStart: "#00F0FF",
-    gradientEnd: "#FF007F",
+    info: "#64ffda",
+    border: "#233554",
+    divider: "#112240", 
+    accent: "#64ffda",
+    gradientStart: "#112240",
+    gradientEnd: "#233554",
 };
 
 export const SPACING = {
@@ -57,10 +57,10 @@ export const SHADOWS = {
         elevation: 10,
     },
     glass: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.4,
-        shadowRadius: 24,
-        elevation: 8,
+        shadowColor: "#020c1b",
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.5,
+        shadowRadius: 20,
+        elevation: 10,
     },
 };
