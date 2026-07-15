@@ -179,8 +179,24 @@ export default function HomeScreen() {
                 </View>
 
                 {/* FOOTER */}
-                <View style={styles.footer}>
-                    <Text style={styles.footerText}>Diseñado y construido por {personalInfo.name}</Text>
+                <View style={[styles.footer, !isDesktop && { paddingBottom: 60 }]}>
+                    {!isDesktop && (
+                        <View style={styles.mobileSocials}>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.github)} style={styles.mobileSocialIcon}>
+                                <FontAwesome5 name="github" size={24} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.linkedin)} style={styles.mobileSocialIcon}>
+                                <FontAwesome5 name="linkedin" size={24} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.compuTrabajo)} style={styles.mobileSocialIcon}>
+                                <FontAwesome5 name="briefcase" size={24} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleSocialPress(personalInfo.links.email)} style={styles.mobileSocialIcon}>
+                                <MaterialIcons name="email" size={26} color={COLORS.textLight} />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                    <Text style={[styles.footerText, !isDesktop && { textAlign: 'center' }]}>Diseñado y construido por {personalInfo.name}</Text>
                 </View>
             </ScrollView>
 
@@ -294,12 +310,12 @@ const styles = StyleSheet.create({
     },
     heroImageContainerMobile: {
         position: 'absolute',
-        top: '20%',
-        right: -80, // Hangs slightly off-screen to look cool
+        top: 0,
+        right: -30,
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 0,
-        pointerEvents: 'none', // Allows clicking through the faded image
+        pointerEvents: 'none',
     },
     imageWrapperDesktop: {
         position: 'relative',
@@ -309,8 +325,8 @@ const styles = StyleSheet.create({
     },
     imageWrapperMobile: {
         position: 'relative',
-        width: 500, // Very large for a background watermark effect
-        height: 500,
+        width: 350, // Reduced from 500 so it doesn't bleed into Habilidades
+        height: 350,
         zIndex: 0,
     },
     heroImage: {
@@ -429,6 +445,16 @@ const styles = StyleSheet.create({
         color: COLORS.textLight,
         fontSize: FONT_SIZE.sm,
         fontFamily: 'monospace',
+    },
+    mobileSocials: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: SPACING.xl,
+        marginBottom: SPACING.lg,
+    },
+    mobileSocialIcon: {
+        padding: SPACING.sm,
     },
 
     // Fixed Sidebars
