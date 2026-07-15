@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image, Modal, TouchableWithoutFeedback } from "react-native";
-import { Video } from "expo-av";
+import { useVideoPlayer, VideoView } from "expo-video";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -22,6 +22,23 @@ const FadeInUp = ({ delay, children, style }) => {
     }, []);
 
     return <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>;
+};
+
+const ProjectVideo = ({ source }) => {
+    const player = useVideoPlayer(source, player => {
+        player.loop = true;
+    });
+
+    return (
+        <View style={styles.videoContainer}>
+            <VideoView
+                style={styles.videoPlayer}
+                player={player}
+                allowsFullscreen
+                allowsPictureInPicture
+            />
+        </View>
+    );
 };
 
 export default function ProjectDetailScreen() {
@@ -135,15 +152,7 @@ export default function ProjectDetailScreen() {
                     {details.video && (
                         <FadeInUp delay={400} style={styles.videoSection}>
                             <Text style={styles.sectionTitle}>Demostración en Video</Text>
-                            <View style={styles.videoContainer}>
-                                <Video
-                                    style={styles.videoPlayer}
-                                    source={details.video}
-                                    useNativeControls
-                                    resizeMode="contain"
-                                    isLooping
-                                />
-                            </View>
+                            <ProjectVideo source={details.video} />
                         </FadeInUp>
                     )}
 
