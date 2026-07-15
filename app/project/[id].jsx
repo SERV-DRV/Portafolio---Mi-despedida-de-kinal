@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image, Modal, TouchableWithoutFeedback } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -27,6 +27,7 @@ export default function ProjectDetailScreen() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const { width } = useWindowDimensions();
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const details = projects.find(p => p.id === parseInt(id)) || { 
         name: "Proyecto no encontrado", 
@@ -135,13 +136,26 @@ export default function ProjectDetailScreen() {
                             <Text style={styles.sectionTitle}>Galería del Proyecto</Text>
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.galleryContainer}>
                                 {details.images.map((img, idx) => (
-                                    <Image key={idx} source={img} style={styles.galleryImage} resizeMode="cover" />
+                                    <TouchableOpacity key={idx} activeOpacity={0.8} onPress={() => setSelectedImage(img)}>
+                                        <Image source={img} style={styles.galleryImage} resizeMode="cover" />
+                                    </TouchableOpacity>
                                 ))}
                             </ScrollView>
                         </FadeInUp>
                     )}
                 </View>
             </ScrollView>
+
+            <Modal visible={!!selectedImage} transparent={true} animationType="fade" onRequestClose={() => setSelectedImage(null)}>
+                <View style={styles.modalBackground}>
+                    <TouchableOpacity style={styles.closeModalButton} onPress={() => setSelectedImage(null)}>
+                        <MaterialIcons name="close" size={32} color={COLORS.text} />
+                    </TouchableOpacity>
+                    {selectedImage && (
+                        <Image source={selectedImage} style={styles.fullScreenImage} resizeMode="contain" />
+                    )}
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -323,5 +337,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         borderColor: COLORS.surfaceVariant,
+    },
+    modalBackground: {
+        flex: 1,
+        backgroundColor: 'rgba(2, 12, 27, 0.95)', // dark transparent background
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeModalButton: {
+        position: 'absolute',
+        top: 40,
+        right: 40,
+        zIndex: 10,
+        padding: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        borderRadius: 20,
+    },
+    fullScreenImage: {
+        width: '90%',
+        height: '90%',
     }
 });
