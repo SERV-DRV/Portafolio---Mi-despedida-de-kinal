@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image, Modal, TouchableWithoutFeedback } from "react-native";
+import { Video, ResizeMode } from "expo-av";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -129,6 +130,22 @@ export default function ProjectDetailScreen() {
                             </FadeInUp>
                         </View>
                     </View>
+
+                    {/* NEW SECTION: VIDEO */}
+                    {details.video && (
+                        <FadeInUp delay={400} style={styles.videoSection}>
+                            <Text style={styles.sectionTitle}>Demostración en Video</Text>
+                            <View style={styles.videoContainer}>
+                                <Video
+                                    style={styles.videoPlayer}
+                                    source={details.video}
+                                    useNativeControls
+                                    resizeMode={ResizeMode.CONTAIN}
+                                    isLooping
+                                />
+                            </View>
+                        </FadeInUp>
+                    )}
 
                     {/* NEW SECTION: GALLERY */}
                     {details.images && details.images.length > 0 && (
@@ -324,8 +341,24 @@ const styles = StyleSheet.create({
         fontSize: FONT_SIZE.sm,
         fontFamily: 'monospace',
     },
+    videoSection: {
+        marginTop: SPACING.xxl,
+    },
+    videoContainer: {
+        width: '100%',
+        height: 400,
+        borderRadius: 8,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: COLORS.surfaceVariant,
+        backgroundColor: COLORS.background,
+    },
+    videoPlayer: {
+        width: '100%',
+        height: '100%',
+    },
     gallerySection: {
-        marginTop: SPACING.xxl * 2,
+        marginTop: SPACING.xxl,
     },
     galleryContainer: {
         gap: SPACING.lg,

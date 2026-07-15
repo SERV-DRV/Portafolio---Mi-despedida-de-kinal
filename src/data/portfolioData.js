@@ -110,6 +110,7 @@ export const projects = [
             require("../../assets/projects/KinalFamiliar/kinal_5.jpeg"),
             require("../../assets/projects/KinalFamiliar/kinal_6.jpeg"),
             require("../../assets/projects/KinalFamiliar/kinal_7.jpeg")
-        ]
+        ],
+        video: require("../../assets/projects/KinalFamiliar/kinal_video.mp4")
     },
 ];
