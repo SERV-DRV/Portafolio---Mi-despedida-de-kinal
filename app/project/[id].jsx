@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, useWindowDimensions, Animated, Image, Modal, TouchableWithoutFeedback } from "react-native";
-import { Video, ResizeMode } from "expo-av";
+import { Video } from "expo-av";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { COLORS, SPACING, FONT_SIZE } from "../../src/shared/constants/theme";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -140,7 +140,7 @@ export default function ProjectDetailScreen() {
                                     style={styles.videoPlayer}
                                     source={details.video}
                                     useNativeControls
-                                    resizeMode={ResizeMode.CONTAIN}
+                                    resizeMode="contain"
                                     isLooping
                                 />
                             </View>

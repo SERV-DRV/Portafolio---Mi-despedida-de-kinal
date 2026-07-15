@@ -30,7 +30,7 @@ export const skills = [
 ];
 
 export const softSkills = [
-    { name: "Liderazgo", icon: "crown", description: "Capacidad para guiar equipos y tomar iniciativas." },
+    { name: "Pensamiento Crítico", icon: "brain", description: "Capacidad para analizar situaciones y tomar decisiones objetivas." },
     { name: "Trabajo en Equipo", icon: "users", description: "Colaboración efectiva para alcanzar metas comunes." },
     { name: "Resolución de Problemas", icon: "puzzle-piece", description: "Análisis lógico para superar obstáculos complejos." },
     { name: "Adaptabilidad", icon: "sync-alt", description: "Flexibilidad ante nuevos entornos y tecnologías." },

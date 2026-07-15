@@ -132,17 +132,17 @@ export default function HomeScreen() {
                         </FadeInUp>
                         
                     </View>
-                </View>
 
-                {/* QUOTE SECTION */}
-                <FadeInUp delay={700}>
-                    <View style={styles.quoteContainer}>
-                        <FontAwesome5 name="quote-left" size={30} color={COLORS.primary} style={styles.quoteIcon} />
-                        <Text style={styles.quoteText}>
-                            "Si quieres cambiar al mundo, cámbiate a ti mismo."
-                        </Text>
-                    </View>
-                </FadeInUp>
+                    {/* QUOTE SECTION */}
+                    <FadeInUp delay={700}>
+                        <View style={styles.quoteContainer}>
+                            <FontAwesome5 name="quote-left" size={30} color={COLORS.primary} style={styles.quoteIcon} />
+                            <Text style={styles.quoteText}>
+                                "Si quieres cambiar al mundo, cámbiate a ti mismo."
+                            </Text>
+                        </View>
+                    </FadeInUp>
+                </View>
 
                 {/* SKILLS SECTION */}
                 <View style={styles.section}>
@@ -270,17 +270,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     heroSection: {
-        minHeight: '80vh',
         width: '100%',
         justifyContent: 'center',
         paddingHorizontal: SPACING.xl,
-        marginBottom: SPACING.xxl * 2,
+        marginBottom: SPACING.xl,
     },
     heroInner: {
         maxWidth: 1000,
         width: '100%',
         alignSelf: 'center',
         justifyContent: 'space-between',
+        marginBottom: SPACING.xxl,
     },
     heroTextContainer: {
         flex: 1,
@@ -465,14 +465,15 @@ const styles = StyleSheet.create({
 
     // Quote Section
     quoteContainer: {
-        paddingVertical: SPACING.xxl,
+        paddingVertical: SPACING.xl,
         paddingHorizontal: SPACING.xl,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: COLORS.surface,
-        marginHorizontal: SPACING.xl,
+        marginHorizontal: 'auto',
+        width: '100%',
+        maxWidth: 800,
         borderRadius: 16,
-        marginBottom: SPACING.xxl * 2,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
