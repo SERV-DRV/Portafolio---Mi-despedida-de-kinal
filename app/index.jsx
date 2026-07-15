@@ -99,13 +99,17 @@ export default function HomeScreen() {
                                 <Text style={styles.heroGreeting}>Hola, mi nombre es</Text>
                             </FadeInUp>
                             <FadeInUp delay={200}>
-                                <Text style={styles.heroName}>{personalInfo.name.split(' ')[0]} {personalInfo.name.split(' ')[1]}.</Text>
+                                <Text style={[styles.heroName, !isDesktop && { fontSize: 40, lineHeight: 48 }]}>
+                                    {personalInfo.name.split(' ')[0]} {personalInfo.name.split(' ')[1]}.
+                                </Text>
                             </FadeInUp>
                             <FadeInUp delay={300}>
-                                <Text style={styles.heroTitle}>{personalInfo.title}.</Text>
+                                <Text style={[styles.heroTitle, !isDesktop && { fontSize: 32, lineHeight: 40 }]}>
+                                    {personalInfo.title}.
+                                </Text>
                             </FadeInUp>
                             <FadeInUp delay={400}>
-                                <Text style={styles.heroBio}>{personalInfo.bio}</Text>
+                                <Text style={[styles.heroBio, !isDesktop && { fontSize: FONT_SIZE.md, lineHeight: 24 }]}>{personalInfo.bio}</Text>
                             </FadeInUp>
                             <FadeInUp delay={500}>
                                 <TouchableOpacity 
