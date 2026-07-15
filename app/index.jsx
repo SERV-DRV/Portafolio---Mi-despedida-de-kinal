@@ -249,7 +249,6 @@ export default function HomeScreen() {
                                     <SoftSkillCard key={skill.name} skill={skill} isDesktop={isDesktop} />
                                 ))}
                             </View>
-                        </View>
                     </View>
                 </FadeInUp>
 
@@ -269,7 +268,6 @@ export default function HomeScreen() {
                                     </View>
                                 ))}
                             </View>
-                        </View>
                     </View>
                 </FadeInUp>
 
