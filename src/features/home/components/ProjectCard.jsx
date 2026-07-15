@@ -37,7 +37,7 @@ const ProjectCard = ({ project, onPress }) => {
                 </View>
 
                 <Text style={styles.name} numberOfLines={1}>{project.name}</Text>
-                <Text style={styles.description}>{project.description}</Text>
+                <Text style={styles.description} numberOfLines={4}>{project.description}</Text>
                 
                 <ScrollView 
                     horizontal 
@@ -64,8 +64,6 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.surface,
         borderRadius: 8,
         padding: SPACING.xl,
-        height: '100%',
-        minHeight: 300,
         justifyContent: 'space-between',
         shadowColor: '#020c1b',
         shadowOffset: { width: 0, height: 10 },
@@ -101,7 +99,6 @@ const styles = StyleSheet.create({
         color: COLORS.textLight,
         lineHeight: 24,
         marginBottom: SPACING.xl,
-        flex: 1,
     },
     techScroll: {
         marginBottom: SPACING.md,
