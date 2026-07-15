@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, SPACING, FONT_SIZE } from "../src/shared/constants/theme";
 import ProjectCard from "../src/features/home/components/ProjectCard";
-import { personalInfo, skills, projects } from "../src/data/portfolioData";
+import { personalInfo, skills, softSkills, projects } from "../src/data/portfolioData";
 
 // Animated entry component
 const FadeInUp = ({ delay, children, style }) => {
@@ -134,6 +134,16 @@ export default function HomeScreen() {
                     </View>
                 </View>
 
+                {/* QUOTE SECTION */}
+                <FadeInUp delay={700}>
+                    <View style={styles.quoteContainer}>
+                        <FontAwesome5 name="quote-left" size={30} color={COLORS.primary} style={styles.quoteIcon} />
+                        <Text style={styles.quoteText}>
+                            "Si quieres cambiar al mundo, cámbiate a ti mismo."
+                        </Text>
+                    </View>
+                </FadeInUp>
+
                 {/* SKILLS SECTION */}
                 <View style={styles.section}>
                     <View style={styles.sectionInner}>
@@ -151,6 +161,23 @@ export default function HomeScreen() {
                             <View style={styles.skillsContainer}>
                                 {skills.map((skill, index) => (
                                     <CustomProgressBar key={skill.name} skill={skill} index={index} />
+                                ))}
+                            </View>
+
+                            <View style={[styles.sectionHeader, { marginTop: SPACING.xxl }]}>
+                                <Text style={styles.sectionTitle}>Habilidades Blandas</Text>
+                                <View style={styles.sectionLine} />
+                            </View>
+
+                            <View style={styles.softSkillsGrid}>
+                                {softSkills.map((skill, index) => (
+                                    <View key={skill.name} style={[styles.softSkillCard, { width: isDesktop ? '31%' : '100%' }]}>
+                                        <View style={styles.softSkillIconContainer}>
+                                            <FontAwesome5 name={skill.icon} size={24} color={COLORS.primary} />
+                                        </View>
+                                        <Text style={styles.softSkillName}>{skill.name}</Text>
+                                        <Text style={styles.softSkillDesc}>{skill.description}</Text>
+                                    </View>
                                 ))}
                             </View>
                         </FadeInUp>
@@ -434,6 +461,74 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
+    },
+
+    // Quote Section
+    quoteContainer: {
+        paddingVertical: SPACING.xxl,
+        paddingHorizontal: SPACING.xl,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.surface,
+        marginHorizontal: SPACING.xl,
+        borderRadius: 16,
+        marginBottom: SPACING.xxl * 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.3,
+        shadowRadius: 20,
+        elevation: 10,
+    },
+    quoteIcon: {
+        marginBottom: SPACING.md,
+        opacity: 0.5,
+    },
+    quoteText: {
+        color: COLORS.text,
+        fontSize: FONT_SIZE.xl,
+        fontStyle: 'italic',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        letterSpacing: 1,
+    },
+
+    // Soft Skills
+    softSkillsGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: SPACING.xl,
+        gap: SPACING.lg,
+    },
+    softSkillCard: {
+        backgroundColor: COLORS.surface,
+        padding: SPACING.xl,
+        borderRadius: 12,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.surfaceVariant,
+    },
+    softSkillIconContainer: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'rgba(100, 255, 218, 0.1)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: SPACING.md,
+    },
+    softSkillName: {
+        color: COLORS.text,
+        fontSize: FONT_SIZE.lg,
+        fontWeight: 'bold',
+        marginBottom: SPACING.sm,
+        textAlign: 'center',
+    },
+    softSkillDesc: {
+        color: COLORS.textLight,
+        fontSize: FONT_SIZE.sm,
+        textAlign: 'center',
+        lineHeight: 20,
     },
 
     // Footer

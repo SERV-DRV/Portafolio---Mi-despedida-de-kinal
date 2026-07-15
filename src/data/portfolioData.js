@@ -23,9 +23,19 @@ export const skills = [
     { name: "React", percentage: 75, color: "#48cae4", icon: "react" },
     { name: "HTML5", percentage: 70, color: "#f4a261", icon: "html5" },
     { name: "Node.js", percentage: 70, color: "#2a9d8f", icon: "node-js" },
+    { name: "Spring Boot", percentage: 70, color: "#7209b7", icon: "leaf" },
     { name: "MongoDB", percentage: 70, color: "#2a9d8f", icon: "envira" },
     { name: "PostgreSQL", percentage: 70, color: "#48cae4", icon: "database" },
     { name: "C#", percentage: 60, color: "#7209b7", icon: "code" },
+];
+
+export const softSkills = [
+    { name: "Liderazgo", icon: "crown", description: "Capacidad para guiar equipos y tomar iniciativas." },
+    { name: "Trabajo en Equipo", icon: "users", description: "Colaboración efectiva para alcanzar metas comunes." },
+    { name: "Resolución de Problemas", icon: "puzzle-piece", description: "Análisis lógico para superar obstáculos complejos." },
+    { name: "Adaptabilidad", icon: "sync-alt", description: "Flexibilidad ante nuevos entornos y tecnologías." },
+    { name: "Autodidacta", icon: "book-reader", description: "Pasión por el aprendizaje continuo y proactivo." },
+    { name: "Comunicación", icon: "comments", description: "Expresión clara y asertiva de ideas." }
 ];
 
 export const projects = [
