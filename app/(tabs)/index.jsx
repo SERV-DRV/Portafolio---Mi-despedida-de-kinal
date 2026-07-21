@@ -34,7 +34,7 @@ export default function Home() {
                     />
 
                     <AnimatedText 
-                        text={personalInfo.role}
+                        text={personalInfo.title}
                         style={styles.role}
                         delay={1000}
                         type="stagger"

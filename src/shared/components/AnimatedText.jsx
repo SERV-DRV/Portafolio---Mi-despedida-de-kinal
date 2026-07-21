@@ -10,12 +10,14 @@ import Animated, {
 import { COLORS, FONT_SIZE } from '../constants/theme';
 
 export default function AnimatedText({ 
-    text, 
+    text = '', 
     style, 
     delay = 0, 
     duration = 500,
     type = 'fade-up' // 'fade-up', 'typewriter', 'stagger'
 }) {
+    const safeText = text || '';
+
     if (type === 'fade-up') {
         const translateY = useSharedValue(20);
         const opacity = useSharedValue(0);
@@ -32,13 +34,13 @@ export default function AnimatedText({
 
         return (
             <Animated.Text style={[styles.defaultText, style, animatedStyle]}>
-                {text}
+                {safeText}
             </Animated.Text>
         );
     }
 
     if (type === 'stagger') {
-        const words = text.split(' ');
+        const words = safeText.split(' ');
         
         return (
             <View style={[styles.row, style]}>
@@ -67,7 +69,7 @@ export default function AnimatedText({
         );
     }
 
-    return <Text style={[styles.defaultText, style]}>{text}</Text>;
+    return <Text style={[styles.defaultText, style]}>{safeText}</Text>;
 }
 
 const styles = StyleSheet.create({
