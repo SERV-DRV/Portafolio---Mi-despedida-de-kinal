@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Pressable, ScrollView, Animated } from "react-n
 import { COLORS, SPACING, FONT_SIZE } from "../../../shared/constants/theme";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
+import GlowingCard from "../../../shared/components/GlowingCard";
+
 const ProjectCard = ({ project, onPress }) => {
     const translateYAnim = useRef(new Animated.Value(0)).current;
     const [isHovered, setIsHovered] = useState(false);
@@ -26,22 +28,13 @@ const ProjectCard = ({ project, onPress }) => {
     };
 
     return (
-        <Pressable 
-            onHoverIn={handleHoverIn}
-            onHoverOut={handleHoverOut}
-            onPress={onPress}
-        >
-            <Animated.View style={[
-                styles.card, 
-                { transform: [{ translateY: translateYAnim }] },
-                isHovered && styles.cardHovered
-            ]}>
-                <View style={styles.header}>
-                    <FontAwesome5 name="folder" size={40} color={COLORS.primary} />
-                    <View style={styles.yearBadge}>
-                        <Text style={styles.yearText}>{project.year}</Text>
-                    </View>
+        <GlowingCard onPress={onPress} style={styles.cardWrapper}>
+            <View style={styles.header}>
+                <FontAwesome5 name="folder" size={40} color={COLORS.primary} />
+                <View style={styles.yearBadge}>
+                    <Text style={styles.yearText}>{project.year}</Text>
                 </View>
+            </View>
 
                 <Text style={styles.name} numberOfLines={1}>{project.name}</Text>
                 <Text style={styles.description} numberOfLines={4}>{project.description}</Text>
@@ -61,32 +54,13 @@ const ProjectCard = ({ project, onPress }) => {
                     <MaterialIcons name="arrow-forward" size={16} color={COLORS.primary} />
                     <Text style={styles.footerText}>Ver proyecto</Text>
                 </View>
-            </Animated.View>
-        </Pressable>
+        </GlowingCard>
     );
 };
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: COLORS.surface,
-        borderRadius: 8,
-        padding: SPACING.xl,
-        justifyContent: 'space-between',
-        shadowColor: '#020c1b',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 20,
-        elevation: 10,
-        borderWidth: 1,
-        borderColor: 'transparent',
-    },
-    cardHovered: {
-        borderColor: COLORS.primary,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.4,
-        shadowRadius: 15,
-        elevation: 10,
+    cardWrapper: {
+        height: '100%',
     },
     header: {
         flexDirection: "row",
